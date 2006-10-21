@@ -1,0 +1,23 @@
+<%
+type = <<-EOV
+type: 'Message::Event'
+EOV
+%>
+
+send:
+  id: 501
+  name: send
+  long_description: The message has been sent
+  <%= type %>
+  
+view:
+  id: 502
+  name: view
+  long_description: The message has been view
+  <%= type %>
+  
+delete:
+  id: 503
+  name: delete
+  long_description: The message has been deleted
+  <%= type %>

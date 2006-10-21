@@ -1,0 +1,5 @@
+ActsAsMessageable
+==========
+
+rake db:migrate:plugins PLUGIN=acts_as_state_machine
+rake db:migrate:plugins PLUGIN=acts_as_messageable

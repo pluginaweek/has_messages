@@ -1,0 +1,35 @@
+<%
+type = <<-EOV
+type: 'Message::State'
+EOV
+%>
+
+unsent:
+  id: 501
+  name: unsent
+  long_description: The message has not been sent yet.
+  <%= type %>
+  
+sent:
+  id: 502
+  name: sent
+  long_description: The message has been sent.
+  <%= type %>
+  
+unread:
+  id: 503
+  name: unread
+  long_description: The message has not been read yet.
+  <%= type %>
+  
+read:
+  id: 504
+  name: read
+  long_description: The message has been read.
+  <%= type %>
+  
+deleted:
+  id: 505
+  name: deleted
+  long_description: The message has been deleted.
+  <%= type %>
