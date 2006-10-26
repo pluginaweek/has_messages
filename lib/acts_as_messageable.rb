@@ -153,6 +153,11 @@ module PluginAWeek #:nodoc:
           end
           
           has_many_options = options.reject {|option, value| [:cross_model_messaging, :class_name, :association_name].include?(option)}
+          if has_many_options[:extend]
+            has_many_options[:extend] = [has_many_options[:extend], Message::StateExtension]
+          else
+            has_many_options[:extend] = Message::StateExtension
+          end
           
           # Add received messages
           received_messages = "received_#{assoc_names}"
