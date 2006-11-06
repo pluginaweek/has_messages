@@ -1,3 +1,12 @@
+# acts
+require 'acts_as_state_machine'
+
+# validations
+require 'validates_xor_presence_of'
+
+# miscellaneous
+require 'kind_associations'
+
 module PluginAWeek #:nodoc:
   module Acts #:nodoc:
     module Messageable
@@ -216,4 +225,8 @@ module PluginAWeek #:nodoc:
       end
     end
   end
+end
+
+ActiveRecord::Base.class_eval do
+  include PluginAWeek::Acts::Messageable
 end
