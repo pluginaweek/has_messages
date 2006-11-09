@@ -119,10 +119,6 @@ module PluginAWeek #:nodoc:
                             :source => :messageable
               end
             end
-            
-            def self.reloadable?
-              false
-            end
           end
           
           inner_message_class.class_eval <<-end_eval
@@ -154,10 +150,6 @@ module PluginAWeek #:nodoc:
             if assoc_name != 'message'
               alias_method    assoc_name, :message
               alias_attribute "#{assoc_name}_id", :message_id
-            end
-            
-            def self.reloadable?
-              false
             end
           end
           
