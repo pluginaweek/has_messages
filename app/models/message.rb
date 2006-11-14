@@ -1,155 +1,39 @@
 # 
 #
 class Message < ActiveRecord::Base
-  #
-  #
-  module EasyBuildRecipientExtension
-    #
-    #
-    def <<(*records)
-      result = true
-      load_target
-      
-      # added
-      records = convert_records(flatten_deeper(records))
-      
-      @owner.transaction do
-        flatten_deeper(records).each do |record|
-          raise_on_type_mismatch(record)
-          callback(:before_add, record)
-          result &&= insert_record(record) unless @owner.new_record?
-          @target << record
-          callback(:after_add, record)
-        end
-      end
-      
-      result && self
-    end
-    alias_method :push, :<<
-    alias_method :concat, :<<
-    
-    #
-    #
-    def delete(*records)
-      # added
-      records = flatten_deeper(records).inject([]) do |recipients, record|
-        recipient = find_recipient(record, @target)
-        recipients << recipient if recipient
-        recipients
-      end
-      
-      records = flatten_deeper(records)
-      records.each { |record| raise_on_type_mismatch(record) }
-      records.reject! { |record| @target.delete(record) if record.new_record? }
-      return if records.empty?
-      
-      @owner.transaction do
-        records.each { |record| callback(:before_remove, record) }
-        delete_records(records)
-        records.each do |record|
-          @target.delete(record)
-          callback(:after_remove, record)
-        end
-      end
-    end
-    
-    #
-    #
-    def replace(other_array)
-      other_array.each { |val| raise_on_type_mismatch(val) }
-      
-      load_target
-      other   = other_array.size < 100 ? other_array : other_array.to_set
-      current = @target.size < 100 ? @target : @target.to_set
-      
-      @owner.transaction do
-        delete(@target.select { |v| find_record(v, other).nil? }) # modified
-        concat(other_array.select { |v| find_recipient(v, current).nil? }) # modified
-      end
-    end
-    
-    def convert_records(records) #:nodoc:
-      records.collect do |record|
-        if recipient_class = get_recipient_class(record)
-          recipient = recipient_class.new
-          recipient.messageable = record
-          record = recipient
-        end
-        
-        record
-      end
-    end
-    
-    def is_recipient_equal?(recipient, record) #:nodoc:
-      recipient.messageable == record
-    end
-    
-    def find_record(recipient, collection) #:nodoc:
-      collection.find {|record| is_recipient_equal?(recipient, record)}
-    end
-    
-    def find_recipient(record, collection) #:nodoc:
-      if !(Message::Recipient === record)
-        record = collection.find {|recipient| is_recipient_equal?(recipient, record)}
-      end
-      record
-    end
-    
-    def get_recipient_class(record) #:nodoc:
-      if !(Message::Recipient === record)
-        message_class_name = @owner.class.name.demodulize
-        begin
-          "#{record.class}::#{message_class_name}::Recipient".constantize
-        rescue NameError
-          raise ArgumentError, "Recipients must be instances of a class that acts_as_messageable: #{record.class}"
-        end
-      end
-    end
-    
-    def raise_on_type_mismatch(record) #:nodoc:
-      unless record.is_a?(@reflection.klass) || get_recipient_class(record)
-        raise ActiveRecord::AssociationTypeMismatch, "#{@reflection.class_name} expected, got #{record.class}"
-      end
-    end
-  end
-  
-  class Recipient < ActiveRecord::Base
-    acts_as_list          :scope => 'message_id = #{message_id} AND kind = #{quote_value(kind)}'
-    
-    validates_presence_of :message_id,
-                          :kind
-    
-    def validate_on_create #:nodoc:
-      errors.add 'messageable_id', 'must be a class that acts_as_messagable' if messageable && !messageable.class.const_defined?('Message')
-    end
-  end
-  
   acts_as_state_machine     :initial => Proc.new {|message| message.recipient ? :unread : :unsent}
   
   validates_xor_presence_of :from_id,
-                            :recipient_id
+                            :recipient_id,
+                              :if => :only_model_participants?
   
   state :unsent
+  state :queued
   state :sent, :enter => :deliver
   state :unread
   state :read
   state :deleted
   
-  #
-  #
-  event :send do
+  # Queues the message so that it is sent in a separate process
+  event :queue do
     transition_to :sent, :from => :unsent,
                     :guard => Proc.new {|message| message.number_of_recipients > 0}
   end
   
-  #
-  #
+  # Sends the message to all of the recipients as long as at least one
+  # recipient has been aded
+  event :send do
+    transition_to :sent, :from => [:unsent, :queued],
+                    :guard => Proc.new {|message| message.number_of_recipients > 0}
+  end
+  
+  # Indicates that the message has been viewed by the recipient of this
+  # message
   event :view do
     transition_to :read, :from => :unread
   end
   
-  #
-  #
+  # Deletes the message
   event :delete do
     transition_to :deleted, :from => [:unread, :read, :sent]
   end
@@ -180,5 +64,27 @@ class Message < ActiveRecord::Base
     message = self.class.new
     message.reference_message = self
     message
+  end
+  
+  private
+  # Are only models allowed to be the from/recipient of this message?  Or can
+  # other classes, like strings, be allowed?
+  def only_model_participants?
+    true
+  end
+  
+  # Copies the current message to all recipients
+  def copy_to_recipients(assoc_name = self.class.name.underscore.pluralize)
+    (to + cc + bcc).each do |recipient|
+      if recipient.messageable.respond_to?(:"received_#{assoc_name}")
+        message = recipient.messageable.send(:"received_#{assoc_names}").build
+      else
+        message = self.class.new
+        message.recipient = recipient.messageable
+      end
+      
+      message.reference_message = self
+      message.save
+    end
   end
 end

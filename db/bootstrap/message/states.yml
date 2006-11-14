@@ -10,6 +10,12 @@ unsent:
   long_description: The message has not been sent yet.
   <%= type %>
   
+queued:
+  id: 502
+  name: queued
+  long_description: The message has been queued to be sent at a later time.
+  <%= type %>
+  
 sent:
   id: 502
   name: sent

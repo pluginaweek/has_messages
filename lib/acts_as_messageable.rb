@@ -36,6 +36,7 @@ module PluginAWeek #:nodoc:
           options[:association_name] ||= options[:class_name].demodulize.downcase.underscore
           raise ArgumentError, 'acts_as_messageable can only be called once per message class' if const_defined?(options[:class_name])
           
+          # Options for the name of the model
           model_name = "::#{self.name}"
           model_assoc_name = model_name.demodulize.underscore
           
@@ -93,10 +94,12 @@ module PluginAWeek #:nodoc:
             
             # If it's not a message model, then add aliases
             if assoc_name != 'message'
-              alias_method  "reference_#{assoc_name}", :reference_message
+              alias_attribute "reference_#{assoc_name}", :reference_message
               alias_attribute "reference_#{assoc_name}_id", :reference_message_id
             end
             
+            # Support reading from, to, cc, and bcc from the reference message
+            # if this message was forwarded
             [:from, :to, :cc, :bcc].each do |method|
               class_eval <<-end_eval
                 def #{method}_with_reference_message
@@ -106,6 +109,9 @@ module PluginAWeek #:nodoc:
               end_eval
             end
             
+            # Support getting all of the messageables of the message's
+            # recipients regardless of whether cross-model messaging is being
+            # allowed
             [:to, :cc, :bcc].each do |method|
               if allow_cross_model_messaging
                 class_eval <<-end_eval
@@ -119,18 +125,28 @@ module PluginAWeek #:nodoc:
                             :source => :messageable
               end
             end
-          end
-          
-          inner_message_class.class_eval <<-end_eval
+            
             private
-            def deliver
+            # Copies the current message to all recipients
+            def copy_to_recipients
               (to + cc + bcc).each do |recipient|
-                message = recipient.messageable.received_#{assoc_names}.build
+                if recipient.messageable.respond_to?(:"received_#{assoc_name}")
+                  message = recipient.messageable.send(:"received_#{assoc_names}").build
+                else
+                  message = message_class.new
+                  message.recipient = recipient.messageable
+                end
+                
                 message.reference_message = self
                 message.save
               end
             end
-          end_eval
+            
+            # Only overrides deliver if it hasn't already been defined
+            if !message_class.instance_methods.include?('deliver')
+              alias_method :deliver, :copy_to_recipients
+            end
+          end
           
           inner_message_class_name = "::#{inner_message_class}"
           
@@ -140,7 +156,7 @@ module PluginAWeek #:nodoc:
                             :class_name => model_name,
                             :foreign_key => 'messageable_id',
                             :dependent => :destroy
-            alias_method    model_assoc_name, :messageable
+            alias_attribute model_assoc_name, :messageable
             alias_attribute "#{model_assoc_name}_id", :messageable_id
             
             belongs_to    :message,
@@ -148,7 +164,7 @@ module PluginAWeek #:nodoc:
                             :foreign_key => 'message_id'
             
             if assoc_name != 'message'
-              alias_method    assoc_name, :message
+              alias_attribute assoc_name, :message
               alias_attribute "#{assoc_name}_id", :message_id
             end
           end
@@ -208,6 +224,8 @@ module PluginAWeek #:nodoc:
             end
           end
           
+          # Create access to a mailbox that contains the received and sent
+          # messages.
           module_eval <<-end_eval
             def #{assoc_name}_box
               @#{assoc_name}_box ||= MessageBox.new(#{received_messages}, #{sent_messages})
