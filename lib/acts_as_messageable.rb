@@ -101,7 +101,7 @@ module PluginAWeek #:nodoc:
             # Support reading from, to, cc, and bcc from the reference message
             # if this message was forwarded
             [:from, :to, :cc, :bcc].each do |method|
-              class_eval <<-end_eval
+              eval <<-end_eval
                 def #{method}_with_reference_message
                   recipient ? reference_message.#{method} : #{method}_without_reference_message
                 end
@@ -114,7 +114,7 @@ module PluginAWeek #:nodoc:
             # allowed
             [:to, :cc, :bcc].each do |method|
               if allow_cross_model_messaging
-                class_eval <<-end_eval
+                eval <<-end_eval
                   def #{method}_recipients
                     #{method}.collect {|recipient| recipient.messageable}
                   end
@@ -127,20 +127,22 @@ module PluginAWeek #:nodoc:
             end
             
             private
-            # Copies the current message to all recipients
-            def copy_to_recipients
-              (to + cc + bcc).each do |recipient|
-                if recipient.messageable.respond_to?(:"received_#{assoc_name}")
-                  message = recipient.messageable.send(:"received_#{assoc_names}").build
-                else
-                  message = message_class.new
-                  message.recipient = recipient.messageable
+             # Copies the current message to all recipients
+            eval <<-end_eval
+              def copy_to_recipients
+                (to + cc + bcc).each do |recipient|
+                  if recipient.messageable.respond_to?(:received_#{assoc_names})
+                    message = recipient.messageable.send(:received_#{assoc_names}).build
+                  else
+                    message = #{inner_message_class}.new
+                    message.recipient = recipient.messageable
+                  end
+                  
+                  message.reference_message = self
+                  message.save
                 end
-                
-                message.reference_message = self
-                message.save
               end
-            end
+            end_eval
             
             # Only overrides deliver if it hasn't already been defined
             if !message_class.instance_methods.include?('deliver')

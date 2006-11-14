@@ -74,9 +74,9 @@ class Message < ActiveRecord::Base
   end
   
   # Copies the current message to all recipients
-  def copy_to_recipients(assoc_name = self.class.name.underscore.pluralize)
+  def copy_to_recipients(assoc_names = self.class.name.underscore.pluralize)
     (to + cc + bcc).each do |recipient|
-      if recipient.messageable.respond_to?(:"received_#{assoc_name}")
+      if recipient.messageable.respond_to?(:"received_#{assoc_names}")
         message = recipient.messageable.send(:"received_#{assoc_names}").build
       else
         message = self.class.new
