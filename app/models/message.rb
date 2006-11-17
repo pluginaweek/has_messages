@@ -16,7 +16,7 @@ class Message < ActiveRecord::Base
   
   # Queues the message so that it is sent in a separate process
   event :queue do
-    transition_to :sent, :from => :unsent,
+    transition_to :queued, :from => :unsent,
                     :guard => Proc.new {|message| message.number_of_recipients > 0}
   end
   
