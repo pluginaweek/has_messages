@@ -9,7 +9,7 @@ class Message < ActiveRecord::Base
   
   state :unsent
   state :queued
-  state :sent, :enter => :deliver
+  state :sent, :after_enter => :deliver
   state :unread
   state :read
   state :deleted
