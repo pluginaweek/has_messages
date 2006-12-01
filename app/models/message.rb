@@ -17,14 +17,14 @@ class Message < ActiveRecord::Base
   # Queues the message so that it is sent in a separate process
   event :queue do
     transition_to :queued, :from => :unsent,
-                    :guard => Proc.new {|message| message.number_of_recipients > 0}
+                    :if => Proc.new {|message| message.number_of_recipients > 0}
   end
   
   # Sends the message to all of the recipients as long as at least one
   # recipient has been aded
   event :send do
     transition_to :sent, :from => [:unsent, :queued],
-                    :guard => Proc.new {|message| message.number_of_recipients > 0}
+                    :if => Proc.new {|message| message.number_of_recipients > 0}
   end
   
   # Indicates that the message has been viewed by the recipient of this
