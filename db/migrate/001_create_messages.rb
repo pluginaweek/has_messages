@@ -21,7 +21,7 @@ class CreateMessages < ActiveRecord::Migration
   def self.down
     Message::State.migrate_down
     
-    drop_table_if_exists :messages
+    drop_table :messages
   end
   
   def self.bootstrap

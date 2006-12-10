@@ -12,6 +12,6 @@ class CreateMessageRecipients < ActiveRecord::Migration
   end
   
   def self.down
-    drop_table_if_exists :message_recipients
+    drop_table :message_recipients
   end
 end
