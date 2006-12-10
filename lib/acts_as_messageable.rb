@@ -7,6 +7,9 @@ require 'validates_xor_presence_of'
 # miscellaneous
 require 'kind_associations'
 
+# ruby
+require 'module_creation_helper'
+
 module PluginAWeek #:nodoc:
   module Acts #:nodoc:
     module Messageable
@@ -62,8 +65,7 @@ module PluginAWeek #:nodoc:
           end
           
           # Create the inner message model
-          inner_message_class = Class.new(message_class)
-          const_set(message_class_name, inner_message_class).class_eval do
+          inner_message_class = Class.create(message_class_name, :superclass => message_class, :parent => self) do
             belongs_to    :from,
                             :class_name => model_name,
                             :foreign_key => 'from_id',
@@ -134,7 +136,7 @@ module PluginAWeek #:nodoc:
                   if recipient.messageable.respond_to?(:received_#{assoc_names})
                     message = recipient.messageable.send(:received_#{assoc_names}).build
                   else
-                    message = #{inner_message_class}.new
+                    message = self.class.new
                     message.recipient = recipient.messageable
                   end
                   
@@ -153,7 +155,7 @@ module PluginAWeek #:nodoc:
           inner_message_class_name = "::#{inner_message_class}"
           
           # Create the recipient model
-          inner_message_class.const_set('Recipient', Class.new(message_class::Recipient)).class_eval do
+          Class.create('Recipient', :superclass => message_class::Recipient, :parent => inner_message_class) do
             belongs_to    :messageable,
                             :class_name => model_name,
                             :foreign_key => 'messageable_id',
