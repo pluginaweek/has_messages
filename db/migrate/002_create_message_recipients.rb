@@ -7,8 +7,8 @@ class CreateMessageRecipients < ActiveRecord::Migration
       t.column :position,       :integer, :null => false
       t.column :type,           :string,  :null => false
     end
-    add_index :message_recipients, [:message_id, :messageable_id, :type], :unique => true, :name => 'unique_message_recipients'
-    add_index :message_recipients, [:message_id, :kind, :position], :unique => true, :name => 'unique_message_recipient_positions'
+    add_index :message_recipients, [:message_id, :messageable_id, :type], :unique => true, :name => 'index_message_recipients_on_message_and_messageable_and_type'
+    add_index :message_recipients, [:message_id, :kind, :position], :unique => true
   end
   
   def self.down
