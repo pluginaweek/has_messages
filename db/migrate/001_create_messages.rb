@@ -1,6 +1,12 @@
 class CreateMessages < ActiveRecord::Migration
+  class State < ActiveRecord::Base; end
+  class Event < ActiveRecord::Base; end
+  class StateChange < ActiveRecord::Base; end
+  
   class Message < ActiveRecord::Base
-    acts_as_state_machine :initial => :dummy
+    class State < State; end
+    class Event < Event; end
+    class StateChange < StateChange; end
   end
   
   def self.up
@@ -14,11 +20,11 @@ class CreateMessages < ActiveRecord::Migration
       t.column :type,                 :string,    :null => false
     end
     
-    Message::State.migrate_up
+    PluginAWeek::Acts::StateMachine.migrate_up(Message)
   end
 
   def self.down
-    Message::State.migrate_down
+    PluginAWeek::Acts::StateMachine.migrate_down(Message)
     
     drop_table :messages
   end
