@@ -71,8 +71,8 @@ class Message < ActiveRecord::Base #:nodoc:
     # Converts all of the records to instances of the Recipient class
     def convert_records(records) #:nodoc:
       records.collect do |record|
-        if r!(recipient_class === record)
-          recipient = recipient_class.new
+        if !(@reflection.klass === record)
+          recipient = build
           recipient.messageable = record
           record = recipient
         end
@@ -95,16 +95,14 @@ class Message < ActiveRecord::Base #:nodoc:
     # Finds the +record+ in the +collection, using the recipients in the
     # collection to determine equality with the record
     def find_recipient(record, collection) #:nodoc:
-      if !(recipient_class === record)
+      if !(@reflection.klass === record)
         record = collection.find {|recipient| is_recipient_equal?(recipient, record)}
       end
       
       record
     end
     
-    # Gets the Recipient class
-    def recipient_class
-      MessageRecipient
+    def raise_on_type_mismatch(record) #:nodoc:
     end
   end
 end
