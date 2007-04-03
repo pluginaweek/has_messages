@@ -1,6 +1,6 @@
 <%
 type = <<-EOV
-type: 'Message::Event'
+owner_type: 'Message'
 EOV
 %>
 

@@ -1,6 +1,6 @@
 <%
 type = <<-EOV
-type: 'Message::State'
+owner_type: 'Message'
 EOV
 %>
 

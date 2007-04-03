@@ -3,7 +3,7 @@ class Message < ActiveRecord::Base #:nodoc:
   #
   module EasyBuildRecipientExtension
     # Add +records+ to this association.  The records can either be instances
-    # of Message::Recipient or the owner (such as User).
+    # of MessageRecipient or the owner (such as User).
     def <<(*records)
       result = true
       load_target
@@ -27,7 +27,7 @@ class Message < ActiveRecord::Base #:nodoc:
     alias_method :concat, :<<
     
     # Remove +records+ from this association.  The records can either be
-    # instances of Message:Recipient or the owner (such as User)
+    # instances of MessageRecipient or the owner (such as User)
     def delete(*records)
       # added
       records = flatten_deeper(records).inject([]) do |recipients, record|
@@ -51,7 +51,7 @@ class Message < ActiveRecord::Base #:nodoc:
       end
     end
     
-    # Replace this collection with +other_array+.  Insances of Message::Recipient
+    # Replace this collection with +other_array+.  Instances of MessageRecipient
     # in +other_array+ can replace instances of the owner class (such as User)
     # if the Recipient's messageable is equal to the owner.  This works both
     # ways.
@@ -71,7 +71,7 @@ class Message < ActiveRecord::Base #:nodoc:
     # Converts all of the records to instances of the Recipient class
     def convert_records(records) #:nodoc:
       records.collect do |record|
-        if recipient_class = get_recipient_class(record)
+        if r!(recipient_class === record)
           recipient = recipient_class.new
           recipient.messageable = record
           record = recipient
@@ -95,29 +95,16 @@ class Message < ActiveRecord::Base #:nodoc:
     # Finds the +record+ in the +collection, using the recipients in the
     # collection to determine equality with the record
     def find_recipient(record, collection) #:nodoc:
-      if !(Message::Recipient === record)
+      if !(recipient_class === record)
         record = collection.find {|recipient| is_recipient_equal?(recipient, record)}
       end
       
       record
     end
     
-    # Gets the Recipient class for the record
-    def get_recipient_class(record) #:nodoc:
-      if !(Message::Recipient === record)
-        message_class_name = @owner.class.name.demodulize
-        begin
-          "#{record.class}::#{message_class_name}::Recipient".constantize
-        rescue NameError
-          raise ArgumentError, "Recipients must be instances of a class that acts_as_messageable: #{record.class}"
-        end
-      end
-    end
-    
-    def raise_on_type_mismatch(record) #:nodoc:
-      unless record.is_a?(@reflection.klass) || get_recipient_class(record) # modified
-        raise ActiveRecord::AssociationTypeMismatch, "#{@reflection.class_name} expected, got #{record.class}"
-      end
+    # Gets the Recipient class
+    def recipient_class
+      MessageRecipient
     end
   end
 end
