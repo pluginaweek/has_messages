@@ -1,12 +1,12 @@
-= acts_as_messageable
+= has_messages
 
-acts_as_messageable .
+has_messages .
 
 == Resources
 
 Wiki
 
-* http://wiki.pluginaweek.org/Acts_as_messageable
+* http://wiki.pluginaweek.org/Has_messages
 
 Announcement
 
@@ -14,17 +14,12 @@ Announcement
 
 Source
 
-* http://svn.pluginaweek.org/trunk/plugins/active_record/acts/acts_as_messageable
+* http://svn.pluginaweek.org/trunk/plugins/active_record/has/has_messages
 
 Development
 
-* http://dev.pluginaweek.org/browser/trunk/plugins/active_record/acts/acts_as_messageable
+* http://dev.pluginaweek.org/browser/trunk/plugins/active_record/has/has_messages
 
 == Description
 
 
-
-== Migrations
-
-rake db:migrate:plugins PLUGIN=acts_as_state_machine
-rake db:migrate:plugins PLUGIN=acts_as_messageable

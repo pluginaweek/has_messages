@@ -1,41 +1,34 @@
-<%
-type = <<-EOV
-owner_type: 'Message'
-EOV
-%>
-
-unsent:
-  id: 501
-  name: unsent
-  long_description: The message has not been sent yet.
-  <%= type %>
-  
-queued:
-  id: 502
-  name: queued
-  long_description: The message has been queued to be sent at a later time.
-  <%= type %>
-  
-sent:
-  id: 503
-  name: sent
-  long_description: The message has been sent.
-  <%= type %>
-  
-unread:
-  id: 504
-  name: unread
-  long_description: The message has not been read yet.
-  <%= type %>
-  
-read:
-  id: 505
-  name: read
-  long_description: The message has been read.
-  <%= type %>
-  
 deleted:
-  id: 506
+  id: 500
   name: deleted
-  long_description: The message has been deleted.
-  <%= type %>
+  owner_type: Message
+  
+sender_unsent:
+  id: 510
+  name: unsent
+  owner_type: SenderMessage
+  
+sender_sent:
+  id: 511
+  name: sent
+  owner_type: SenderMessage
+  
+recipient_unsent:
+  id: 520
+  name: unsent
+  owner_type: MessageRecipient
+  
+recipient_sent:
+  id: 521
+  name: sent
+  owner_type: MessageRecipient
+  
+receiver_unread:
+  id: 530
+  name: unread
+  owner_type: ReceiverMessage
+  
+receiver_read:
+  id: 531
+  name: read
+  owner_type: ReceiverMessage

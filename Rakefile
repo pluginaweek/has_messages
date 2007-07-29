@@ -3,7 +3,7 @@ require 'rake/rdoctask'
 require 'rake/gempackagetask'
 require 'rake/contrib/sshpublisher'
 
-PKG_NAME           = 'acts_as_messageable'
+PKG_NAME           = 'has_messages'
 PKG_VERSION        = '0.0.1'
 PKG_FILE_NAME      = "#{PKG_NAME}-#{PKG_VERSION}"
 RUBY_FORGE_PROJECT = 'pluginaweek'
@@ -11,17 +11,17 @@ RUBY_FORGE_PROJECT = 'pluginaweek'
 desc 'Default: run unit tests.'
 task :default => :test
 
-desc 'Test the acts_as_messageable plugin.'
+desc 'Test the has_messages plugin.'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
-  t.pattern = 'test/**/*_test.rb'
+  t.pattern = 'test/unit/**/*_test.rb'
   t.verbose = true
 end
 
-desc 'Generate documentation for the acts_as_messageable plugin.'
+desc 'Generate documentation for the has_messages plugin.'
 Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'ActsAsMessageable'
+  rdoc.title    = 'HasMessages'
   rdoc.options << '--line-numbers' << '--inline-source'
   rdoc.rdoc_files.include('README')
   rdoc.rdoc_files.include('lib/**/*.rb')
@@ -35,7 +35,7 @@ spec = Gem::Specification.new do |s|
   
   s.files           = FileList['{app,db,lib,tasks,test}/**/*'].to_a + %w(init.rb MIT-LICENSE Rakefile README)
   s.require_path    = 'lib'
-  s.autorequire     = 'acts_as_messageable'
+  s.autorequire     = 'has_messages'
   s.has_rdoc        = true
   s.test_files      = Dir['test/**/*_test.rb']
   

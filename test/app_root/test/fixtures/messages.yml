@@ -1,0 +1,60 @@
+sent_from_bob:
+  id: 1
+  owner_id: 1
+  owner_type: User
+  subject: "Funny joke"
+  body: "Why can't dinosaurs talk? ...Because they're dead!"
+  created_at: <%= Time.now.to_s(:db) %>
+  type: SenderMessage
+  state_id: 511
+  
+bob_to_john:
+  id: 2
+  owner_id: 1
+  created_at: <%= Time.now.to_s(:db) %>
+  type: ReceiverMessage
+  state_id: 531
+  
+bob_to_mary:
+  id: 3
+  owner_id: 2
+  created_at: <%= Time.now.to_s(:db) %>
+  type: ReceiverMessage
+  state_id: 530
+  
+sent_from_mary:
+  id: 4
+  owner_id: 3
+  owner_type: User
+  subject: "FW: Funny joke"
+  body: "> Why can't dinosaurs talk? ...Because they're dead!"
+  created_at: <%= Time.now.to_s(:db) %>
+  type: SenderMessage
+  state_id: 511
+  
+mary_to_john:
+  id: 5
+  owner_id: 3
+  created_at: <%= Time.now.to_s(:db) %>
+  type: ReceiverMessage
+  state_id: 530
+  
+unsent_from_bob:
+  id: 6
+  owner_id: 1
+  owner_type: User
+  subject: "Another funny joke"
+  body: "Where do cows go on a date? ...To the moovies!"
+  created_at: <%= Time.now.to_s(:db) %>
+  type: SenderMessage
+  state_id: 510
+  
+queued_from_bob:
+  id: 7
+  owner_id: 1
+  owner_type: User
+  subject: ""
+  body: ""
+  created_at: <%= Time.now.to_s(:db) %>
+  type: SenderMessage
+  state_id: 511

@@ -1,7 +1,12 @@
-class Message < ActiveRecord::Base #:nodoc:
-  #
-  #
-  module EasyBuildRecipientExtension
+class MessageRecipient < ActiveRecord::Base #:nodoc:
+  # Makes it easy building recipients by adding built-in support for automatically
+  # creating recipients if the messageable recorded is being used.  For example,
+  # 
+  #   message = SenderMessage.new
+  #   message.to << user1
+  #   message.cc << user2
+  #   message.cc.delete(user2)
+  module EasyBuildExtension
     # Add +records+ to this association.  The records can either be instances
     # of MessageRecipient or the owner (such as User).
     def <<(*records)
@@ -30,6 +35,7 @@ class Message < ActiveRecord::Base #:nodoc:
     # instances of MessageRecipient or the owner (such as User)
     def delete(*records)
       # added
+      load_target if !loaded?
       records = flatten_deeper(records).inject([]) do |recipients, record|
         recipient = find_recipient(record, @target)
         recipients << recipient if recipient
@@ -72,8 +78,10 @@ class Message < ActiveRecord::Base #:nodoc:
     def convert_records(records) #:nodoc:
       records.collect do |record|
         if !(@reflection.klass === record)
-          recipient = build
+          recipient = @reflection.klass.new
+          set_belongs_to_association_for(record)
           recipient.messageable = record
+          recipient.kind = kind
           record = recipient
         end
         
