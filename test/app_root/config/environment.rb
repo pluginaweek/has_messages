@@ -1,4 +1,3 @@
-
 require 'config/boot'
 
 $:.unshift("#{RAILS_ROOT}/../../../../../rails/plugin_dependencies/lib")
