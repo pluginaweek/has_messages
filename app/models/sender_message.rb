@@ -14,17 +14,17 @@ class SenderMessage < Message
     :foreign_key => 'message_id',
     :order => 'position ASC',
     :dependent => true
-  ) do |w|
-    w.has_many  :to,
+  ) do |m|
+    m.has_many  :to,
                   :conditions => ['kind = ?', 'to'],
                   :extend => [MessageRecipient::EasyBuildToExtension]
-    w.has_many  :cc,
+    m.has_many  :cc,
                   :conditions => ['kind = ?', 'cc'],
                   :extend => [MessageRecipient::EasyBuildCcExtension]
-    w.has_many  :bcc,
+    m.has_many  :bcc,
                   :conditions => ['kind = ?', 'bcc'],
                   :extend => [MessageRecipient::EasyBuildBccExtension]
-    w.has_many  :all_recipients,
+    m.has_many  :all_recipients,
                   :order => 'kind DESC, position ASC'
   end
   
