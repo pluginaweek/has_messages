@@ -18,9 +18,9 @@ module PluginAWeek #:nodoc:
             :received_class
           )
           options.reverse_merge!(:message_class => 'Message')
-          options[:sender_class] ||= (const_defined?("Sender#{options[:message_class]}") ? "Sender#{options[:message_class]}" : 'SenderMessage')
-          options[:recipient_class] ||= (const_defined?("#{options[:message_class]}Recipient") ? "#{options[:message_class]}Recipient" : 'MessageRecipient')
-          options[:receiver_class] ||= (const_defined?("Receiver#{options[:message_class]}") ? "Receiver#{options[:message_class]}" : 'ReceiverMessage')
+          options[:sender_class] ||= begin; "Sender#{options[:message_class]}".constantize.to_s; rescue NameError; 'SenderMessage'; end;
+          options[:recipient_class] ||= begin; "#{options[:message_class]}Recipient".constantize.to_s; rescue NameError; 'MessageRecipient'; end;
+          options[:receiver_class] ||= begin; "Receiver#{options[:message_class]}".constantize.to_s; rescue NameError; 'ReceiverMessage'; end;
           
           assoc_names = args.first ? args.first.to_s : 'messages'
           assoc_name = assoc_names.singularize

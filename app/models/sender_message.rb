@@ -17,13 +17,13 @@ class SenderMessage < Message
   ) do |m|
     m.has_many  :to,
                   :conditions => ['kind = ?', 'to'],
-                  :extend => [MessageRecipient::EasyBuildToExtension]
+                  :extend => [MessageRecipientToBuildExtension]
     m.has_many  :cc,
                   :conditions => ['kind = ?', 'cc'],
-                  :extend => [MessageRecipient::EasyBuildCcExtension]
+                  :extend => [MessageRecipientCcBuildExtension]
     m.has_many  :bcc,
                   :conditions => ['kind = ?', 'bcc'],
-                  :extend => [MessageRecipient::EasyBuildBccExtension]
+                  :extend => [MessageRecipientBccBuildExtension]
     m.has_many  :all_recipients,
                   :order => 'kind DESC, position ASC'
   end

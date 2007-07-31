@@ -20,8 +20,6 @@ class MessageRecipient < ActiveRecord::Base
                 :foreign_key => 'owner_id'
   has_many    :receiver_messages,
                 :foreign_key => 'owner_id'
-#                :as => :owner,
-#                :source_type => nil
   
   validates_presence_of :message_id,
                         :kind,

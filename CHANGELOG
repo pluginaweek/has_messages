@@ -1,2 +1,5 @@
 *SVN*
 
+* Moved Build extensions out of the MessageRecipient class
+
+* Fix determining whether classes exist in has_messages
