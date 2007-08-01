@@ -2,36 +2,38 @@
 class MessageRecipient < ActiveRecord::Base
   acts_as_list :scope => 'message_id = #{message_id} AND kind = #{quote_value(kind)}'
   
-  has_states  :initial => :unsent
-  
-  state :unsent,
-        :sent
-  
-  event :deliver do
-    transition_to :sent, :from => :unsent
-  end
-  
-  belongs_to  :message,
-                :class_name => 'SenderMessage',
-                :foreign_key => 'message_id'
-  belongs_to  :messageable,
+  belongs_to  :message
+  belongs_to  :receiver,
                 :polymorphic => true
-  has_one     :receiver_message,
-                :foreign_key => 'owner_id'
-  has_many    :receiver_messages,
-                :foreign_key => 'owner_id'
+  has_states  :initial => :unsent
   
   validates_presence_of :message_id,
                         :kind,
                         :state_id
-  validates_presence_of :messageable_id,
-                        :messageable_type,
+  validates_presence_of :receiver_id,
+                        :receiver_type,
                           :if => :model_participant?
   
-  # 
-  def deliver
-    message = build_receiver_message
-    message.save!
+  state :unsent,
+        :unread,
+        :read,
+        :deleted
+  
+  alias_method :sent_at, :unread_at
+  
+  # Delivers the message
+  event :deliver do
+    transition_to :unread, :from => :unsent
+  end
+  
+  # Indicates that the message has been viewed by the receiver
+  event :view do
+    transition_to :read, :from => :unread
+  end
+  
+  # Deletes the message
+  event :delete, :after => :destroy do
+    transition_to :deleted, :from => [:unread, :read]
   end
   
   private

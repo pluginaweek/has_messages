@@ -1,34 +1,34 @@
-deleted:
+message_unsent:
   id: 500
+  name: unsent
+  owner_type: Message
+  
+message_sent:
+  id: 501
+  name: sent
+  owner_type: Message
+  
+message_deleted:
+  id: 502
   name: deleted
   owner_type: Message
   
-sender_unsent:
+recipient_unsent:
   id: 510
   name: unsent
-  owner_type: SenderMessage
+  owner_type: MessageRecipient
   
-sender_sent:
+recipient_unread:
   id: 511
-  name: sent
-  owner_type: SenderMessage
-  
-recipient_unsent:
-  id: 520
-  name: unsent
-  owner_type: MessageRecipient
-  
-recipient_sent:
-  id: 521
-  name: sent
-  owner_type: MessageRecipient
-  
-receiver_unread:
-  id: 530
   name: unread
-  owner_type: ReceiverMessage
+  owner_type: MessageRecipient
   
-receiver_read:
-  id: 531
+recipient_read:
+  id: 512
   name: read
-  owner_type: ReceiverMessage
+  owner_type: MessageRecipient
+  
+recipient_deleted:
+  id: 513
+  name: deleted
+  owner_type: MessageRecipient

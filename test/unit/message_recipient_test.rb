@@ -11,12 +11,12 @@ class MessageRecipientTest < Test::Unit::TestCase
     assert_invalid message_recipients(:bob_to_john), :kind, nil
   end
   
-  def test_should_require_messageable_id
-    assert_invalid message_recipients(:bob_to_john), :messageable_id, nil
+  def test_should_require_receiver_id
+    assert_invalid message_recipients(:bob_to_john), :receiver_id, nil
   end
   
-  def test_should_require_messageable_type
-    assert_invalid message_recipients(:bob_to_john), :messageable_type, nil
+  def test_should_require_receiver_type
+    assert_invalid message_recipients(:bob_to_john), :receiver_type, nil
   end
   
   def test_should_require_state_id
@@ -30,7 +30,7 @@ class MessageRecipientTest < Test::Unit::TestCase
   def test_should_set_position_based_on_number_of_recipients_in_to
     recipient = MessageRecipient.new
     recipient.message = messages(:sent_from_bob)
-    recipient.messageable = users(:bob)
+    recipient.receiver = users(:bob)
     recipient.kind = 'to'
     
     assert recipient.save!
@@ -40,7 +40,7 @@ class MessageRecipientTest < Test::Unit::TestCase
   def test_should_set_position_based_on_number_of_recipients_in_cc
     recipient = MessageRecipient.new
     recipient.message = messages(:sent_from_bob)
-    recipient.messageable = users(:bob)
+    recipient.receiver = users(:bob)
     recipient.kind = 'cc'
     
     assert recipient.save!
@@ -50,7 +50,7 @@ class MessageRecipientTest < Test::Unit::TestCase
   def test_should_set_position_based_on_number_of_recipients_in_bcc
     recipient = MessageRecipient.new
     recipient.message = messages(:sent_from_bob)
-    recipient.messageable = users(:bob)
+    recipient.receiver = users(:bob)
     recipient.kind = 'bcc'
     
     assert recipient.save!
@@ -61,27 +61,8 @@ class MessageRecipientTest < Test::Unit::TestCase
     assert_equal messages(:sent_from_bob), message_recipients(:bob_to_john).message
   end
   
-  def test_message_should_only_be_sender_message
-    recipient = MessageRecipient.new
-    message = recipient.build_message
-    
-    assert_instance_of SenderMessage, message
-  end
-  
-  def test_should_have_messageable_association
-    assert_equal users(:john), message_recipients(:bob_to_john).messageable
-  end
-  
-  def test_should_have_receiver_message_association_if_sent
-    assert_equal messages(:bob_to_john), message_recipients(:bob_to_john).receiver_message
-  end
-  
-  def test_should_not_have_receiver_message_association_if_not_sent
-    assert_nil message_recipients(:unsent_bob_to_john).receiver_message
-  end
-  
-  def test_should_be_sent_if_already_sent
-    assert message_recipients(:bob_to_john).sent?
+  def test_should_have_receiver_association
+    assert_equal users(:john), message_recipients(:bob_to_john).receiver
   end
   
   def test_should_be_unsent_if_not_yet_sent
@@ -92,14 +73,31 @@ class MessageRecipientTest < Test::Unit::TestCase
     assert message_recipients(:unsent_bob_to_john).deliver!
   end
   
-  def test_should_not_deliver_if_sent
+  def test_should_not_deliver_if_unread
+    assert !message_recipients(:bob_to_mary).deliver!
+  end
+  
+  def test_should_not_deliver_if_read
     assert !message_recipients(:bob_to_john).deliver!
   end
   
-  def test_should_create_receiver_message_when_delivered
-    recipient = message_recipients(:unsent_bob_to_john)
-    recipient.deliver!
-    
-    assert_not_nil recipient.receiver_message
+  def test_should_not_view_if_unsent
+    assert !message_recipients(:unsent_bob_to_john).view!
+  end
+  
+  def test_should_view_if_unread
+    assert message_recipients(:bob_to_mary).view!
+  end
+  
+  def test_should_not_view_if_read
+    assert !message_recipients(:bob_to_john).view!
+  end
+  
+  def test_should_delete_if_unread
+    assert message_recipients(:bob_to_mary).delete!
+  end
+  
+  def test_should_delete_if_read
+    assert message_recipients(:bob_to_john).delete!
   end
 end

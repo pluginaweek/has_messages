@@ -4,11 +4,11 @@ class HasMessagesTest < Test::Unit::TestCase
   fixtures :users, :messages, :message_recipients
   
   def test_should_generate_received_association
-    assert_equal [messages(:bob_to_john), messages(:mary_to_john)], users(:john).received_messages
+    assert_equal [messages(:sent_from_bob), messages(:sent_from_mary)], users(:john).received_messages.map(&:message)
   end
   
   def test_should_generate_received_association_for_custom_names
-    assert_equal [messages(:bob_to_john), messages(:mary_to_john)], users(:john).received_notes
+    assert_equal [messages(:sent_from_bob), messages(:sent_from_mary)], users(:john).received_notes.map(&:message)
   end
   
   def test_should_generate_unsent_association

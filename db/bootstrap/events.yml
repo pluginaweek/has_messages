@@ -1,24 +1,29 @@
-delete:
+semessage_deliver:
   id: 500
+  name: deliver
+  owner_type: Message
+  
+message_queue:
+  id: 501
+  name: queue
+  owner_type: Message
+  
+message_delete:
+  id: 502
   name: delete
   owner_type: Message
   
-sender_deliver:
-  id: 510
-  name: deliver
-  owner_type: SenderMessage
-  
-sender_queue:
-  id: 511
-  name: queue
-  owner_type: SenderMessage
-  
 recipient_deliver:
-  id: 520
+  id: 510
   name: deliver
   owner_type: MessageRecipient
   
-receiver_view:
-  id: 530
+recipient_view:
+  id: 511
   name: view
-  owner_type: ReceiverMessage
+  owner_type: MessageRecipient
+  
+recipient_delete:
+  id: 512
+  name: delete
+  owner_type: MessageRecipient

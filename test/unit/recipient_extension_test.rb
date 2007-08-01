@@ -7,37 +7,37 @@ class RecipientExtensionTest < Test::Unit::TestCase
     @message = messages(:unsent_from_bob)
   end
   
-  def test_should_input_messageable
+  def test_should_input_receiver
     @message.to << users(:bob)
     assert_equal [users(:john), users(:bob)], @message.to_receivers
   end
   
   def test_should_input_message_recipients
-    @message.to << MessageRecipient.new(:messageable => users(:bob), :kind => 'to')
+    @message.to << MessageRecipient.new(:receiver => users(:bob), :kind => 'to')
     assert_equal [users(:john), users(:bob)], @message.to_receivers
   end
   
-  def test_should_push_messageable
+  def test_should_push_receiver
     @message.to.push(users(:bob))
     assert_equal [users(:john), users(:bob)], @message.to_receivers
   end
   
   def test_should_push_message_recipients
-    @message.to.push(MessageRecipient.new(:messageable => users(:bob), :kind => 'to'))
+    @message.to.push(MessageRecipient.new(:receiver => users(:bob), :kind => 'to'))
     assert_equal [users(:john), users(:bob)], @message.to_receivers
   end
   
-  def test_should_concat_messageable
+  def test_should_concat_receiver
     @message.to.concat([users(:bob)])
     assert_equal [users(:john), users(:bob)], @message.to_receivers
   end
   
   def test_should_concat_message_recipients
-    @message.to.concat([MessageRecipient.new(:messageable => users(:bob), :kind => 'to')])
+    @message.to.concat([MessageRecipient.new(:receiver => users(:bob), :kind => 'to')])
     assert_equal [users(:john), users(:bob)], @message.to_receivers
   end
   
-  def test_should_delete_messageable
+  def test_should_delete_receiver
     @message.to.delete(users(:john))
     assert_equal [], @message.to_receivers
   end
@@ -47,7 +47,7 @@ class RecipientExtensionTest < Test::Unit::TestCase
     assert_equal [], @message.to
   end
   
-  def test_should_should_replace_messageable
+  def test_should_should_replace_receiver
     @message.to.replace([users(:bob)])
     assert_equal [users(:bob)], @message.to_receivers
   end

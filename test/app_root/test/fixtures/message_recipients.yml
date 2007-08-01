@@ -1,53 +1,53 @@
 bob_to_john:
   id: 1
   message_id: 1
-  messageable_id: 2
-  messageable_type: User
+  receiver_id: 2
+  receiver_type: User
   kind: to
   position: 1
-  state_id: 521
+  state_id: 512
   
 bob_to_mary:
   id: 2
   message_id: 1
-  messageable_id: 3
-  messageable_type: User
+  receiver_id: 3
+  receiver_type: User
   kind: cc
   position: 1
-  state_id: 521
+  state_id: 511
   
 mary_to_john:
   id: 3
-  message_id: 4
-  messageable_id: 2
-  messageable_type: User
+  message_id: 2
+  receiver_id: 2
+  receiver_type: User
   kind: bcc
   position: 1
-  state_id: 521
+  state_id: 511
   
 unsent_bob_to_john:
   id: 4
-  message_id: 6
-  messageable_id: 2
-  messageable_type: User
+  message_id: 3
+  receiver_id: 2
+  receiver_type: User
   kind: to
   position: 1
-  state_id: 520
+  state_id: 510
   
 unsent_bob_to_mary:
   id: 5
-  message_id: 6
-  messageable_id: 3
-  messageable_type: User
+  message_id: 3
+  receiver_id: 3
+  receiver_type: User
   kind: cc
   position: 1
-  state_id: 520
+  state_id: 510
   
 queued_bob_to_john:
   id: 6
-  message_id: 7
-  messageable_id: 2
-  messageable_type: User
+  message_id: 4
+  receiver_id: 2
+  receiver_type: User
   kind: to
   position: 1
-  state_id: 520
+  state_id: 510

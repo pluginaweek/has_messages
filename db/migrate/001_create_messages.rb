@@ -1,8 +1,8 @@
 class CreateMessages < ActiveRecord::Migration
   def self.up
     create_table :messages do |t|
-      t.column :owner_id, :integer, :null => false, :references => nil
-      t.column :owner_type, :string
+      t.column :sender_id, :integer, :null => false, :references => nil
+      t.column :sender_type, :string, :null => false
       t.column :subject, :text
       t.column :body, :text
       t.column :created_at, :datetime, :null => false

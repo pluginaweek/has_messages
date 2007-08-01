@@ -1,5 +1,5 @@
 # Makes it easy building recipients by adding built-in support for automatically
-# creating recipients if the messageable recorded is being used.  For example,
+# creating recipients if the receiver recorded is being used.  For example,
 # 
 #   message = SenderMessage.new
 #   message.to << user1
@@ -58,7 +58,7 @@ module MessageRecipientBuildExtension
   
   # Replace this collection with +other_array+.  Instances of MessageRecipient
   # in +other_array+ can replace instances of the owner class (such as User)
-  # if the Recipient's messageable is equal to the owner.  This works both
+  # if the Recipient's receiver is equal to the sender.  This works both
   # ways.
   def replace(other_array)
     other_array.each { |val| raise_on_type_mismatch(val) }
@@ -79,7 +79,7 @@ module MessageRecipientBuildExtension
       if !(@reflection.klass === record)
         recipient = @reflection.klass.new
         set_belongs_to_association_for(record) if record === ActiveRecord::Base
-        recipient.messageable = record
+        recipient.receiver = record
         recipient.kind = kind
         record = recipient
       end
@@ -90,11 +90,11 @@ module MessageRecipientBuildExtension
   
   # Determines whether or not the Recipient is equal to the specified record
   def is_recipient_equal?(recipient, record) #:nodoc:
-    recipient.messageable == record
+    recipient.receiver == record
   end
   
   # Finds the +recipient+ in the +collection+, using the recipient's
-  # messageable for determining equality
+  # receiver for determining equality
   def find_record(recipient, collection) #:nodoc:
     collection.find {|record| is_recipient_equal?(recipient, record)}
   end
