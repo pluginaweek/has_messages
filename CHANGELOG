@@ -1,5 +1,7 @@
 *SVN*
 
+* Convert dos newlines to unix newlines
+
 * Move ReceiverMessage state into the MessageRecipient class
 
 * Moved Build extensions out of the MessageRecipient class
