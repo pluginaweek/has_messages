@@ -1,6 +1,6 @@
 = has_messages
 
-has_messages adds support for messaging capabilities between ActiveRecord models.
++has_messages+ adds support for messaging capabilities between ActiveRecord models.
 
 == Resources
 
@@ -66,7 +66,7 @@ sending and receiving messages to and between models in your application.
 
 === External process messaging
 
-In addition to delivering message immediately, you can also *queue* messages so
+In addition to delivering messages immediately, you can also *queue* messages so
 that an external application processes and delivers them.  This is especially
 useful for messages that need to be sent outside of the confines of the web
 application, such as emails (see has_emails[http://wiki.pluginaweek.org/Has_emails]).
