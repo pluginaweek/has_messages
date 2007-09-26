@@ -38,6 +38,7 @@ spec = Gem::Specification.new do |s|
   s.autorequire     = 'has_messages'
   s.has_rdoc        = true
   s.test_files      = Dir['test/**/*_test.rb']
+  s.add_dependency  'has_states', '>= 0.0.1'
   
   s.author          = 'Aaron Pfeifer, Neil Abraham'
   s.email           = 'info@pluginaweek.org'
