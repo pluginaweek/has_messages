@@ -104,14 +104,14 @@ class Message < ActiveRecord::Base
   
   # Forwards this message
   def forward
-    message = Message.new(:subject => subject, :body => body)
+    message = self.class.new(:subject => subject, :body => body)
     message.sender = sender
     message
   end
   
   # Replies to this message
   def reply
-    message = Message.new(:subject => subject, :body => body)
+    message = self.class.new(:subject => subject, :body => body)
     message.sender = sender
     message.to.concat(to_receivers)
     

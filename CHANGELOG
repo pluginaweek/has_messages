@@ -2,6 +2,8 @@
 
 *0.0.1* (September 26th, 2007)
 
+* Message#forward and Message#reply should create new instances of the current class, not always Message
+
 * Add type field to MessageRecipient table
 
 * Allow message senders to not be model recipients in third-party plugins
