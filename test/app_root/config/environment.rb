@@ -11,8 +11,7 @@ Rails::Initializer.run do |config|
     "#{RAILS_ROOT}/../../..",
     "#{RAILS_ROOT}/../../../../migrations",
     "#{RAILS_ROOT}/../../../../../rails",
-    "#{RAILS_ROOT}/../../../../../test",
-    "#{RAILS_ROOT}/../../../../has"
+    "#{RAILS_ROOT}/../../../../../test"
   ])
   config.plugins = [
     'loaded_plugins',
