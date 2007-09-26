@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class MessageTest < Test::Unit::TestCase
-  fixtures :users, :messages, :message_recipients
+  fixtures :users, :messages, :message_recipients, :state_changes
   
   def test_should_require_sender_id
     assert_invalid messages(:sent_from_bob), :sender_id, nil

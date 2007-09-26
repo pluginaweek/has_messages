@@ -1,0 +1,107 @@
+# Emails
+sent_from_bob_unsent:
+  id: 1
+  stateful_id: 1
+  stateful_type: Email
+  to_state_id: 500
+  occurred_at: <%= Time.now.to_s(:db) %>
+  
+sent_from_bob_sent:
+  id: 2
+  stateful_id: 1
+  stateful_type: Email
+  from_state_id: 500
+  to_state_id: 502
+  event_id: 500
+  occurred_at: <%= Time.now.to_s(:db) %>
+  
+sent_from_mary_unsent:
+  id: 3
+  stateful_id: 2
+  stateful_type: Email
+  to_state_id: 500
+  occurred_at: <%= Time.now.to_s(:db) %>
+  
+sent_from_mary_sent:
+  id: 4
+  stateful_id: 2
+  stateful_type: Email
+  from_state_id: 500
+  to_state_id: 502
+  event_id: 500
+  occurred_at: <%= Time.now.to_s(:db) %>
+  
+unsent_from_bob_unsent:
+  id: 5
+  stateful_id: 3
+  stateful_type: Email
+  to_state_id: 500
+  occurred_at: <%= Time.now.to_s(:db) %>
+  
+queued_from_bob_unsent:
+  id: 6
+  stateful_id: 4
+  stateful_type: Email
+  to_state_id: 500
+  occurred_at: <%= Time.now.to_s(:db) %>
+  
+queued_from_bob_queued:
+  id: 7
+  stateful_id: 4
+  stateful_type: Email
+  from_state_id: 500
+  to_state_id: 501
+  event_id: 501
+  occurred_at: <%= Time.now.to_s(:db) %>
+  
+# EmailRecipients
+bob_to_john_unread:
+  id: 8
+  stateful_id: 1
+  stateful_type: EmailRecipient
+  to_state_id: 510
+  occurred_at: <%= Time.now.to_s(:db) %>
+  
+bob_to_john_read:
+  id: 9
+  stateful_id: 1
+  stateful_type: EmailRecipient
+  from_state_id: 510
+  to_state_id: 511
+  event_id: 510
+  occurred_at: <%= Time.now.to_s(:db) %>
+  
+bob_to_mary_unread:
+  id: 10
+  stateful_id: 2
+  stateful_type: EmailRecipient
+  to_state_id: 510
+  occurred_at: <%= Time.now.to_s(:db) %>
+  
+mary_to_john_unread:
+  id: 11
+  stateful_id: 5
+  stateful_type: EmailRecipient
+  to_state_id: 510
+  occurred_at: <%= Time.now.to_s(:db) %>
+  
+unsent_bob_to_john_unread:
+  id: 12
+  stateful_id: 6
+  stateful_type: EmailRecipient
+  to_state_id: 510
+  occurred_at: <%= Time.now.to_s(:db) %>
+  
+unsent_bob_to_mary_unread:
+  id: 13
+  stateful_id: 7
+  stateful_type: EmailRecipient
+  to_state_id: 510
+  occurred_at: <%= Time.now.to_s(:db) %>
+  
+queued_bob_to_john_unread:
+  id: 14
+  stateful_id: 8
+  stateful_type: EmailRecipient
+  to_state_id: 510
+  occurred_at: <%= Time.now.to_s(:db) %>
