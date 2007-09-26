@@ -1,5 +1,13 @@
 *SVN*
 
+*0.0.1* (September 26th, 2007)
+
+* Remove old references to Message::StateExtension
+
+* Update with dependency on custom_callbacks
+
+* Add documentation
+
 * Convert dos newlines to unix newlines
 
 * Move ReceiverMessage state into the MessageRecipient class

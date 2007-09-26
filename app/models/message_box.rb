@@ -1,4 +1,4 @@
-# Contains the received and sent messages for a particular box
+# Contains the received, sent, and unsent messages for a particular box
 class MessageBox
   attr_reader :inbox,
               :unsent,

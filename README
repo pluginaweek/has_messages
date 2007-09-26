@@ -1,8 +1,12 @@
 = has_messages
 
-has_messages .
+has_messages adds support for messaging capabilities between ActiveRecord models.
 
 == Resources
+
+API
+
+* http://api.pluginaweek.org/has_messages
 
 Wiki
 
@@ -10,7 +14,7 @@ Wiki
 
 Announcement
 
-* http://www.pluginaweek.org/
+* http://www.pluginaweek.org
 
 Source
 
@@ -22,4 +26,87 @@ Development
 
 == Description
 
+Messaging between users and other parts of a system is a fairly common feature in
+web applications, especially for those that support social networking.  Messaging
+doesn't necessarily need to be between users, but can also act as a way for the
+web application to send notices and other notifications to users.
 
+Designing and building a framework that supports these messaging capabilities can
+become complex and cumbersome and takes away from the focus of the web application.
+This plugin helps ease that process by providing a complete implementation for
+sending and receiving messages to and between models in your application.
+
+== Usage
+
+=== Adding message support
+
+  class User < ActiveRecord::Base
+    has_messages
+  end
+
+=== Creating new messages
+
+  message = user.messages.build
+  message.to << [user1, user2]
+  message.subject = 'Hey!'
+  message.body = 'Does anyone want to go out tonight?'
+  message.deliver!
+
+=== Replying to messages
+
+  reply = message.reply_to_all
+  reply.body = "I'd love to go out!"
+  reply.deliver!
+
+=== Forwarding messages
+
+  forward = message.forward
+  forward.body = 'Interested?'
+  forward.send!
+
+=== External process messaging
+
+In addition to delivering message immediately, you can also *queue* messages so
+that an external application processes and delivers them.  This is especially
+useful for messages that need to be sent outside of the confines of the web
+application, such as emails (see has_emails[http://wiki.pluginaweek.org/Has_emails]).
+
+To queue messages for external processing, you can simply use the <tt>queue!</tt>
+event, rather than <tt>deliver!</tt>.  This will indicate to any external processes
+that the message is ready to be sent.  The external process can then invoke <tt>deliver!</tt>
+whenever it is ready to send the queued message.
+
+=== Running migrations
+
+To migrate the tables required for this plugin, you can either run the
+migration from the command line like so:
+
+  rake db:migrate:plugins PLUGIN=has_messages
+
+or (more ideally) generate a migration file that will integrate into your main
+application's migration path:
+
+  ruby script/generate plugin_migration MigrateHasMessagesToVersion2
+
+== Testing
+
+Before you can run any tests, the following gems must be installed:
+* plugin_test_helper[http://wiki.pluginaweek.org/Plugin_test_helper]
+* dry_validity_assertions[http://wiki.pluginaweek.org/Dry_validity_assertions]
+
+== Dependencies
+
+This plugin depends on the presence of the following plugins:
+* has_states[http://wiki.pluginaweek.org/Has_states]
+
+This plugin is also a plugin+.  That means that it contains a slice of an
+application, such as models and migrations.  To test or use a plugin+, you
+must have the following plugins/gems installed:
+* plugin_dependencies[http://wiki.pluginaweek.org/Plugin_dependencies]
+* loaded_plugins[http://wiki.pluginaweek.org/Loaded_plugins]
+* appable_plugins[http://wiki.pluginaweek.org/Appable_plugins]
+* plugin_migrations[http://wiki.pluginaweek.org/Plugin_migrations]
+
+Instead of installing each individual plugin+ feature, you can install them all
+at once using the plugins+[http://wiki.pluginaweek.org/Plugins_plus] meta package,
+which contains all additional features.

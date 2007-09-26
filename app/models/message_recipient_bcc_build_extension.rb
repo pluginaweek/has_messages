@@ -1,4 +1,4 @@
-# 
+# Build support for +bcc+ recipients
 module MessageRecipientBccBuildExtension
   include MessageRecipientBuildExtension
   

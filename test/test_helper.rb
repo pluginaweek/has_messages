@@ -1,7 +1,7 @@
 # Load local repository plugin paths
 $:.unshift("#{File.dirname(__FILE__)}/../../../associations/class_associations/lib")
-$:.unshift("#{File.dirname(__FILE__)}/../../../has/has_association_helper/lib")
 $:.unshift("#{File.dirname(__FILE__)}/../../../has/has_states/lib")
+$:.unshift("#{File.dirname(__FILE__)}/../../../miscellaneous/custom_callbacks/lib")
 $:.unshift("#{File.dirname(__FILE__)}/../../../miscellaneous/dry_transaction_rollbacks/lib")
 $:.unshift("#{File.dirname(__FILE__)}/../../../../ruby/object/eval_call/lib")
 

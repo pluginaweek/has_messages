@@ -1,4 +1,25 @@
+# Represents a message sent from one user to one or more others.
 # 
+# == States
+# 
+# Messages can be in 1 or 3 states:
+# * +unsent+ - The message has not yet been sent.  This is the *initial* state.
+# * +sent+ - The message has been sent.
+# * +deleted+ - The message has been deleted by the sender.
+# 
+# == Deleting messages
+# 
+# If the sender attempts to delete the message after he has already sent it, the
+# record will not be destroyed until all recipients have deleted their copy of the
+# message as well.
+# 
+# == Interacting with the message
+# 
+# In order to perform actions on the message, such as queueing, delivering, or
+# deleting, you should always use the associated event message:
+# * +queue!+ - Queues the message so that it is sent in a separate process
+# * +deliver!+ - Sends the message to all of the recipients
+# * +delete!+ - Deletes the message
 class Message < ActiveRecord::Base
   belongs_to  :sender,
                 :polymorphic => true

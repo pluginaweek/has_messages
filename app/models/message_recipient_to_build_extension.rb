@@ -1,4 +1,4 @@
-# 
+# Build support for +to+ recipients
 module MessageRecipientToBuildExtension
   include MessageRecipientBuildExtension
   

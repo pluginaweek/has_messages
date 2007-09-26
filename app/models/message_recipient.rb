@@ -1,4 +1,13 @@
-# Represents a recipient of a message
+# Represents a recipient of a message.  The kind of recipient (to, cc, or bcc) is
+# stored in the +kind+ attribute.
+# 
+# == States
+#
+# Recipients can be in 1 of 4 states:
+# * +unsent+ - The message has yet to be sent to this recipient.  This is the *initial* state.
+# * +unread+ - The message has been sent, but not yet read by the recipient
+# * +read+ - The message has been read by the recipient
+# * +deleted+ - The message has been deleted by the recipient
 class MessageRecipient < ActiveRecord::Base
   acts_as_list :scope => 'message_id = #{message_id} AND kind = #{quote_value(kind)}'
   
@@ -37,6 +46,7 @@ class MessageRecipient < ActiveRecord::Base
   end
   
   private
+  # Must the receiver be a model?
   def model_participant?
     true
   end

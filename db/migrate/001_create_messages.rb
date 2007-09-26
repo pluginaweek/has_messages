@@ -6,7 +6,7 @@ class CreateMessages < ActiveRecord::Migration
       t.column :subject, :text
       t.column :body, :text
       t.column :created_at, :datetime, :null => false
-      t.column :type, :string, :null => false
+      t.column :type, :string
     end
     
     PluginAWeek::Has::States.migrate_up(:messages)

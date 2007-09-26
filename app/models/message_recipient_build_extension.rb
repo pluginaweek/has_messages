@@ -1,13 +1,15 @@
 # Makes it easy building recipients by adding built-in support for automatically
-# creating recipients if the receiver recorded is being used.  For example,
+# converting receivers to the recipient class.  For example, rather than creating
+# an instance of MessageRecipient and adding it to +to+, +cc+, or +bcc+, you can
+# add the actual receiver (in this case an instance of User), to the collection.
 # 
-#   message = SenderMessage.new
+#   message = Message.new
 #   message.to << user1
 #   message.cc << user2
 #   message.cc.delete(user2)
 module MessageRecipientBuildExtension
   # Add +records+ to this association.  The records can either be instances
-  # of MessageRecipient or the owner (such as User).
+  # of MessageRecipient or the receiver (such as User).
   def <<(*records)
     result = true
     load_target
@@ -31,7 +33,7 @@ module MessageRecipientBuildExtension
   alias_method :concat, :<<
   
   # Remove +records+ from this association.  The records can either be
-  # instances of MessageRecipient or the owner (such as User)
+  # instances of MessageRecipient or the receiver (such as User)
   def delete(*records)
     # added
     load_target if !loaded?

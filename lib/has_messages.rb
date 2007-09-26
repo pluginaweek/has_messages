@@ -2,13 +2,34 @@ require 'has_states'
 
 module PluginAWeek #:nodoc:
   module Has #:nodoc:
+    # Adds support for messaging capabilities between models
     module Messages
       def self.included(base) #:nodoc:
         base.extend(MacroMethods)
       end
       
       module MacroMethods
+        # Adds messaging support between this instances of the current model
+        # class.
         # 
+        # Configuration options:
+        # * +message_class+ - The name of the class holding information about the message.  Default value is "Message".
+        # * +recipient_class+ - The name of the class for creating recipients of messages.  Default value is "MessageRecipient".
+        # 
+        # == Generated associations
+        # 
+        # The following +has_many+ associations are created for models that support
+        # messaging:
+        # * +message_recipients+ - A collection of MessageRecipients in which this record is a receiver
+        # * +unsent_messages+ - A collection of Messages which have not yet been sent
+        # * +sent_messages+ - A collection of Messages which have already been sent
+        # 
+        # == Generated instance methods
+        # 
+        # In addition to the above associations, the following instance methods
+        # are created for models that support messaging:
+        # * +received_messages+ - A collection of ReceivedMessages (wraps around the +message_recipients+ association)
+        # * +message_box+ - An instance of MessageBox, which contains received, unsent, and sent messages
         def has_messages(*args, &extension)
           options = extract_options_from_args!(args).symbolize_keys!
           options.assert_valid_keys(
@@ -41,7 +62,6 @@ module PluginAWeek #:nodoc:
           has_many  unsent_messages,
                       :as => :sender,
                       :class_name => options[:message_class],
-                      :extend => Message::StateExtension,
                       :conditions => ['messages.state_id = ?', Message.states.find_by_name('unsent')],
                       :order => 'messages.created_at ASC'
           
@@ -50,7 +70,6 @@ module PluginAWeek #:nodoc:
           has_many  sent_messages,
                       :as => :sender,
                       :class_name => options[:message_class],
-                      :extend => Message::StateExtension,
                       :conditions => ['messages.state_id = ?', Message.states.find_by_name('sent')],
                       :order => 'messages.created_at ASC'
           

@@ -1,4 +1,6 @@
-# A mesage which has been received from somewhere else
+# A mesage which has been received from somewhere else.  Received messages are
+# composed of a +message_recipient+, which contains information about who the
+# receiver was and what the message was.
 class ReceivedMessage
   delegate  :sent_at,
             :sender,
