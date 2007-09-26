@@ -3,32 +3,22 @@ message_unsent:
   name: unsent
   owner_type: Message
   
-message_sent:
+message_queued:
   id: 501
+  name: queued
+  owner_type: Message
+  
+message_sent:
+  id: 502
   name: sent
   owner_type: Message
   
-message_deleted:
-  id: 502
-  name: deleted
-  owner_type: Message
-  
-recipient_unsent:
-  id: 510
-  name: unsent
-  owner_type: MessageRecipient
-  
 recipient_unread:
-  id: 511
+  id: 510
   name: unread
   owner_type: MessageRecipient
   
 recipient_read:
-  id: 512
+  id: 511
   name: read
-  owner_type: MessageRecipient
-  
-recipient_deleted:
-  id: 513
-  name: deleted
   owner_type: MessageRecipient

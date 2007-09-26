@@ -6,6 +6,7 @@ class CreateMessages < ActiveRecord::Migration
       t.column :subject, :text
       t.column :body, :text
       t.column :created_at, :datetime, :null => false
+      t.column :deleted_at, :datetime
       t.column :type, :string
     end
     

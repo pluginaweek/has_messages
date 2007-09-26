@@ -46,7 +46,7 @@ sending and receiving messages to and between models in your application.
 
 === Creating new messages
 
-  message = user.unsent_messages.build
+  message = user.messages.build
   message.to << [user1, user2]
   message.subject = 'Hey!'
   message.body = 'Does anyone want to go out tonight?'
@@ -62,7 +62,7 @@ sending and receiving messages to and between models in your application.
 
   forward = message.forward
   forward.body = 'Interested?'
-  forward.send!
+  forward.deliver!
 
 === External process messaging
 
@@ -98,6 +98,7 @@ Before you can run any tests, the following gems must be installed:
 
 This plugin depends on the presence of the following plugins:
 * has_states[http://wiki.pluginaweek.org/Has_states]
+* has_finder[http://rubyforge.org/projects/pivotalrb]
 
 This plugin is also a plugin+.  That means that it contains a slice of an
 application, such as models and migrations.  To test or use a plugin+, you

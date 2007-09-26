@@ -2,6 +2,8 @@
 
 *0.0.1* (September 26th, 2007)
 
+* Use has_finder for tracking the deletion status of Messages/MessageRecipients
+
 * Message#forward and Message#reply should create new instances of the current class, not always Message
 
 * Add type field to MessageRecipient table

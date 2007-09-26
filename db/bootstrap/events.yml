@@ -8,11 +8,6 @@ message_queue:
   name: queue
   owner_type: Message
   
-message_delete:
-  id: 502
-  name: delete
-  owner_type: Message
-  
 recipient_deliver:
   id: 510
   name: deliver
@@ -21,9 +16,4 @@ recipient_deliver:
 recipient_view:
   id: 511
   name: view
-  owner_type: MessageRecipient
-  
-recipient_delete:
-  id: 512
-  name: delete
   owner_type: MessageRecipient

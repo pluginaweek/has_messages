@@ -11,13 +11,15 @@ Rails::Initializer.run do |config|
     "#{RAILS_ROOT}/../../..",
     "#{RAILS_ROOT}/../../../../migrations",
     "#{RAILS_ROOT}/../../../../../rails",
-    "#{RAILS_ROOT}/../../../../../test"
+    "#{RAILS_ROOT}/../../../../../test",
+    "#{RAILS_ROOT}/../../../../../third_party"
   ])
   config.plugins = [
     'loaded_plugins',
     'appable_plugins',
     'plugin_migrations',
     'has_states',
+    'has_finder',
     File.basename(File.expand_path("#{RAILS_ROOT}/../..")),
     'dry_validity_assertions'
   ]

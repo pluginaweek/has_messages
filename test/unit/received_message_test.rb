@@ -72,8 +72,9 @@ class ReceivedMessageTest < Test::Unit::TestCase
   end
   
   def test_should_access_recipients_events
-    assert @message.delete!
-    assert message_recipients(:bob_to_john).deleted?
+    message = ReceivedMessage.new(message_recipients(:bob_to_mary))
+    assert message.view!
+    assert message_recipients(:bob_to_mary).read?
   end
   
   def test_should_access_recipient_states

@@ -5,7 +5,7 @@ sent_from_bob:
   subject: "Funny joke"
   body: "Why can't dinosaurs talk? ...Because they're dead!"
   created_at: <%= Time.now.to_s(:db) %>
-  state_id: 501
+  state_id: 502
   type: Message
   
 sent_from_mary:
@@ -15,7 +15,7 @@ sent_from_mary:
   subject: "FW: Funny joke"
   body: "> Why can't dinosaurs talk? ...Because they're dead!"
   created_at: <%= Time.now.to_s(:db) %>
-  state_id: 501
+  state_id: 502
   type: Message
   
 unsent_from_bob:

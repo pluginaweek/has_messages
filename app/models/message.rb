@@ -4,14 +4,8 @@
 # 
 # Messages can be in 1 or 3 states:
 # * +unsent+ - The message has not yet been sent.  This is the *initial* state.
+# * +queued+ - The message has been queued for future delivery.
 # * +sent+ - The message has been sent.
-# * +deleted+ - The message has been deleted by the sender.
-# 
-# == Deleting messages
-# 
-# If the sender attempts to delete the message after he has already sent it, the
-# record will not be destroyed until all recipients have deleted their copy of the
-# message as well.
 # 
 # == Interacting with the message
 # 
@@ -19,8 +13,15 @@
 # deleting, you should always use the associated event message:
 # * +queue!+ - Queues the message so that it is sent in a separate process
 # * +deliver!+ - Sends the message to all of the recipients
-# * +delete!+ - Deletes the message
+# 
+# == Deleting messages
+# 
+# If the sender attempts to delete the message after he has already sent it, the
+# record will not be destroyed until all recipients have deleted their copy of the
+# message as well.
 class Message < ActiveRecord::Base
+  has_finder :active, :conditions => {:deleted_at => nil}
+  
   belongs_to  :sender,
                 :polymorphic => true
   has_states  :initial => :unsent
@@ -33,7 +34,7 @@ class Message < ActiveRecord::Base
     :class_name => 'MessageRecipient',
     :foreign_key => 'message_id',
     :order => 'position ASC',
-    :dependent => true
+    :dependent => :destroy
   ) do |m|
     m.has_many  :to,
                   :conditions => ['kind = ?', 'to'],
@@ -44,9 +45,12 @@ class Message < ActiveRecord::Base
     m.has_many  :bcc,
                   :conditions => ['kind = ?', 'bcc'],
                   :extend => [MessageRecipientBccBuildExtension]
-    m.has_many  :all_recipients,
-                  :order => 'kind DESC, position ASC'
   end
+  
+  has_many  :all_recipients,
+              :class_name => 'MessageRecipient',
+              :foreign_key => 'message_id',
+              :order => 'kind DESC, position ASC'
   
   validates_presence_of :state_id
   validates_presence_of :sender_id,
@@ -54,26 +58,28 @@ class Message < ActiveRecord::Base
                           :if => :model_participant?
   
   state :unsent,
-        :sent,
-        :deleted
+        :queued,
+        :sent
   
   # Queues the message so that it is sent in a separate process
   event :queue do
-    transition_to :sent, :from => :unsent,
+    transition_to :queued, :from => :unsent,
                     :if => Proc.new {|message| message.all_recipients.size > 0}
   end
   
   # Sends the message to all of the recipients as long as at least one
   # recipient has been aded
   event :deliver do
-    transition_to :sent, :from => :unsent,
+    transition_to :sent, :from => [:unsent, :queued],
                     :if => Proc.new {|message| message.all_recipients.size > 0}
   end
   
-  # Deletes the message
-  event :delete do
-    transition_to :deleted, :from => [:unsent, :sent]
+  # Adds a proxy to +sent_at+ to use the +queued_at+ value in case the message is
+  # being processed by an external application
+  def sent_at_with_queue(*args)
+    queued_at(*args) || sent_at_without_queue(*args)
   end
+  alias_method_chain :sent_at, :queue
   
   # Support getting all the message's receivers
   [:to, :cc, :bcc].each do |method|
@@ -87,19 +93,6 @@ class Message < ActiveRecord::Base
   # To, cc, and bcc receivers
   def all_receivers
     all_recipients.map(&:receiver)
-  end
-  
-  # Delivers the message to all recipients
-  def deliver
-    all_recipients.each do |recipient|
-      recipient.deliver!
-    end
-  end
-  
-  # Destroys the message only if there are no sent messages depending on this
-  # one
-  def after_delete
-    destroy if all_recipients.all? {|recipient| recipient.deleted?}
   end
   
   # Forwards this message
@@ -129,6 +122,27 @@ class Message < ActiveRecord::Base
     
     message
   end
+  
+  # Is this message *not* yet deleted and still visible to the sender?
+  def active?
+    deleted_at.nil?
+  end
+  
+  # True if this message has been deleted and is no longer active
+  def deleted?
+    !active?
+  end
+  
+  # Only destroys the message if every recipient has destroyed their copy,
+  # otherwise sets the +deleted_at+ field
+  def destroy_with_recipient_check
+    if all_recipients.all? {|recipient| recipient.deleted?}
+      destroy_without_recipient_check
+    else
+      update_attribute :deleted_at, Time.now
+    end
+  end
+  alias_method_chain :destroy, :recipient_check
   
   private
   # Must the sender be a model?

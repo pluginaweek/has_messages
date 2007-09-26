@@ -68,10 +68,7 @@ class MessageTest < Test::Unit::TestCase
     m = messages(:unsent_from_bob)
     m.to << users(:john)
     assert m.queue!
-    assert m.sent?
-    m.all_recipients.each do |recipient|
-      assert recipient.unsent?
-    end
+    assert m.queued?
   end
   
   def test_should_not_queue_if_there_are_no_recipients
@@ -81,22 +78,28 @@ class MessageTest < Test::Unit::TestCase
     assert !m.queue!
   end
   
+  def test_should_not_queue_if_queued
+    m = messages(:queued_from_bob)
+    assert m.queued?
+    assert !m.queue!
+  end
+  
   def test_should_not_queue_if_sent
     m = messages(:sent_from_bob)
     assert m.sent?
     assert !m.queue!
   end
   
-  def test_should_not_queue_if_deleted
-    m = messages(:unsent_from_bob)
-    assert m.delete!
-    assert m.deleted?
-    assert !m.queue!
-  end
-  
   def test_should_deliver_if_unsent
     m = messages(:unsent_from_bob)
     assert m.deliver!
+    assert m.sent?
+  end
+  
+  def test_should_deliver_if_queued
+    m = messages(:queued_from_bob)
+    assert m.deliver!
+    assert m.sent?
   end
   
   def test_should_not_deliver_if_there_are_no_recipients
@@ -111,30 +114,6 @@ class MessageTest < Test::Unit::TestCase
     assert !m.deliver!
   end
   
-  def test_should_not_deliver_if_deleted
-    m = messages(:unsent_from_bob)
-    assert m.delete!
-    assert !m.deliver!
-  end
-  
-  def test_should_delete_from_unsent
-    m = messages(:unsent_from_bob)
-    assert m.delete!
-    assert m.deleted?
-  end
-  
-  def test_should_delete_from_sent
-    m = messages(:sent_from_bob)
-    assert m.delete!
-    assert m.deleted?
-  end
-  
-  def test_should_not_delete_from_deleted
-    m = messages(:sent_from_bob)
-    m.delete!
-    assert !m.delete!
-  end
-  
   def test_should_deliver_messages_to_each_recipient_when_sent
     m = messages(:unsent_from_bob)
     m.deliver!
@@ -143,29 +122,50 @@ class MessageTest < Test::Unit::TestCase
     end
   end
   
-  def test_should_not_send_messages_to_each_recipient_when_queued
-    m = messages(:unsent_from_bob)
-    m.queue!
-    m.all_recipients.each do |recipient|
-      assert recipient.unsent?
-    end
+  def test_should_be_active_if_not_yet_deleted
+    assert messages(:sent_from_bob).active?
   end
   
-  def test_should_not_destroy_if_sent_messages_still_exist
+  def test_should_not_be_active_if_deleted
     m = messages(:sent_from_bob)
-    m.delete!
+    m.destroy
+    assert !m.active?
+  end
+  
+  def test_should_be_deleted_if_deleted
+    m = messages(:sent_from_bob)
+    m.destroy
     assert m.deleted?
+  end
+  
+  def test_should_not_be_deleted_if_not_deleted
+    assert !messages(:sent_from_bob).deleted?
+  end
+  
+  def test_should_destroy_but_not_delete_if_sent_messages_still_exist
+    m = messages(:sent_from_bob)
+    assert m.destroy
+    m.reload
+    assert m.deleted_at?
     assert Message.exists?(m.id)
   end
   
-  def test_should_destroy_if_sent_messages_deleted
-    message_recipients(:bob_to_john).delete!
-    message_recipients(:bob_to_mary).delete!
+  def test_should_destroy_and_delete_if_sent_messages_destroyed
+    message_recipients(:bob_to_john).destroy
+    message_recipients(:bob_to_mary).destroy
     
     m = messages(:sent_from_bob)
-    m.delete!
-    assert m.deleted?
+    m.destroy
     assert !Message.exists?(m.id)
+  end
+  
+  def test_sent_at_should_use_queued_at_time_if_queued
+    m = messages(:queued_from_bob)
+    assert_equal m.queued_at, m.sent_at
+  end
+  
+  def test_sent_at_should_use_sent_at_time_if_not_queued
+    assert_nil messages(:sent_from_bob).queued_at
   end
   
   def test_reply_should_generate_clone_of_message

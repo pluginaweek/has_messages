@@ -5,7 +5,7 @@ bob_to_john:
   receiver_type: User
   kind: to
   position: 1
-  state_id: 512
+  state_id: 511
   
 bob_to_mary:
   id: 2
@@ -14,7 +14,7 @@ bob_to_mary:
   receiver_type: User
   kind: cc
   position: 1
-  state_id: 511
+  state_id: 510
   
 mary_to_john:
   id: 3
@@ -23,7 +23,7 @@ mary_to_john:
   receiver_type: User
   kind: bcc
   position: 1
-  state_id: 511
+  state_id: 510
   
 unsent_bob_to_john:
   id: 4
