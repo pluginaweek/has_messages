@@ -1,4 +1,4 @@
-semessage_deliver:
+message_deliver:
   id: 500
   name: deliver
   owner_type: Message
@@ -8,12 +8,7 @@ message_queue:
   name: queue
   owner_type: Message
   
-recipient_deliver:
-  id: 510
-  name: deliver
-  owner_type: MessageRecipient
-  
 recipient_view:
-  id: 511
+  id: 510
   name: view
   owner_type: MessageRecipient
