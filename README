@@ -46,7 +46,7 @@ sending and receiving messages to and between models in your application.
 
 === Creating new messages
 
-  message = user.messages.build
+  message = user.unsent_messages.build
   message.to << [user1, user2]
   message.subject = 'Hey!'
   message.body = 'Does anyone want to go out tonight?'
