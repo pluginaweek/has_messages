@@ -6,6 +6,7 @@ class CreateMessageRecipients < ActiveRecord::Migration
       t.column :receiver_type, :string, :null => false
       t.column :kind, :string, :null => false, :default => 'to'
       t.column :position, :integer, :null => false
+      t.column :type, :string
     end
     add_index :message_recipients, [:message_id, :kind, :position], :unique => true
     

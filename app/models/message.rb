@@ -48,9 +48,10 @@ class Message < ActiveRecord::Base
                   :order => 'kind DESC, position ASC'
   end
   
+  validates_presence_of :state_id
   validates_presence_of :sender_id,
                         :sender_type,
-                        :state_id
+                          :if => :model_participant?
   
   state :unsent,
         :sent,
@@ -127,5 +128,11 @@ class Message < ActiveRecord::Base
     end
     
     message
+  end
+  
+  private
+  # Must the sender be a model?
+  def model_participant?
+    true
   end
 end

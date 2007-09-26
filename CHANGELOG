@@ -2,6 +2,10 @@
 
 *0.0.1* (September 26th, 2007)
 
+* Add type field to MessageRecipient table
+
+* Allow message senders to not be model recipients in third-party plugins
+
 * Remove old references to Message::StateExtension
 
 * Update with dependency on custom_callbacks

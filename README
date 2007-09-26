@@ -86,7 +86,7 @@ migration from the command line like so:
 or (more ideally) generate a migration file that will integrate into your main
 application's migration path:
 
-  ruby script/generate plugin_migration MigrateHasMessagesToVersion2
+  ruby script/generate plugin_migration has_messages
 
 == Testing
 
