@@ -1,5 +1,21 @@
 *SVN*
 
+*0.1.0* (May 5th, 2008)
+
+* Remove dependency on acts_as_list
+
+* Update to reflect changes from has_states to state_machine
+
+* Introduce an ActionMailer-type api for adding the various types of recipients
+
+* Update migrations to support Rails 2.0 syntax
+
+* Replace has_finder dependency with named_scope
+
+* Remove has_messages helper
+
+* Update documentation
+
 *0.0.1* (September 26th, 2007)
 
 * Add state_changes fixtures for tests

@@ -1,91 +1,75 @@
-require 'has_states'
-require 'has_finder'
+require 'state_machine'
 
 module PluginAWeek #:nodoc:
-  module Has #:nodoc:
-    # Adds support for messaging capabilities between models
-    module Messages
-      def self.included(base) #:nodoc:
-        base.extend(MacroMethods)
+  # Adds a generic implementation for sending messages between users
+  module HasMessages
+    def self.included(base) #:nodoc:
+      base.class_eval do
+        extend PluginAWeek::HasMessages::MacroMethods
+      end
+    end
+    
+    module MacroMethods
+      # Creates the following message associations:
+      # * +messages+ - Messages that were composed and are visible to the owner.  Mesages may have been sent or unsent.
+      # * +received_messages - Messages that have been received from others and are visible.  Messages may have been read or unread.
+      # 
+      # == Creating new messages
+      # 
+      # To create a new message, the +messages+ association should be used, for example:
+      # 
+      #   user = User.find(123)
+      #   message = user.messages.build
+      #   message.subject = 'Hello'
+      #   message.body = 'How are you?'
+      #   message.to User.find(456)
+      #   message.save!
+      #   message.deliver!
+      # 
+      # == Drafts
+      # 
+      # You can get the drafts for a particular user by using the +unsent_messages+
+      # helper method.  This will find all messages in the "unsent" state.  For example,
+      # 
+      #   user = User.find(123)
+      #   user.unsent_messages
+      # 
+      # You can also get at the messages that *have* been sent, using the +sent_messages+
+      # helper method.  For example,
+      # 
+      #  user = User.find(123)
+      #  user.sent_messages
+      def has_messages
+        has_many  :messages,
+                    :as => :sender,
+                    :class_name => 'Message',
+                    :conditions => {:hidden_at => nil},
+                    :order => 'messages.created_at ASC'
+        has_many  :received_messages,
+                    :as => :receiver,
+                    :class_name => 'MessageRecipient',
+                    :include => :message,
+                    :conditions => ['message_recipients.hidden_at IS NULL AND messages.state = ?', 'sent'],
+                    :order => 'messages.created_at ASC'
+        
+        include PluginAWeek::HasMessages::InstanceMethods
+      end
+    end
+    
+    module InstanceMethods
+      # Composed messages that have not yet been sent
+      def unsent_messages
+        messages.with_state('unsent')
       end
       
-      module MacroMethods
-        # Adds messaging support between this instances of the current model
-        # class.
-        # 
-        # Configuration options:
-        # * +message_class+ - The name of the class holding information about the message.  Default value is "Message".
-        # * +recipient_class+ - The name of the class for creating recipients of messages.  Default value is "MessageRecipient".
-        # 
-        # == Generated associations
-        # 
-        # The following +has_many+ associations are created for models that support
-        # messaging:
-        # * +message+ - A collection of all Messages initiated by the sender (unsent or sent)
-        # * +message_recipients+ - A collection of MessageRecipients in which this record is a receiver
-        # 
-        # == Generated instance methods
-        # 
-        # In addition to the above associations, the following instance methods
-        # are created for models that support messaging:
-        # * +received_messages+ - A collection of ReceivedMessages (wraps around the +message_recipients+ association)
-        # * +unsent_messages+ - A collection of Messages which have not yet been sent
-        # * +sent_messages+ - A collection of Messages which have already been sent
-        # * +message_box+ - An instance of MessageBox, which contains received, unsent, and sent messages
-        def has_messages(*args, &extension)
-          options = extract_options_from_args!(args).symbolize_keys!
-          options.assert_valid_keys(
-            :message_class,
-            :recipient_class
-          )
-          options.reverse_merge!(:message_class => 'Message')
-          options[:recipient_class] ||= begin; "#{options[:message_class]}Recipient".constantize.to_s; rescue NameError; 'MessageRecipient'; end;
-          
-          messages = args.first ? args.first.to_s : 'messages'
-          message = messages.singularize
-          
-          # Add messages
-          has_many  messages.to_sym,
-                      :as => :sender,
-                      :class_name => options[:message_class],
-                      :order => 'messages.created_at ASC'
-          
-          # Add recipients
-          message_recipients = :"#{message}_recipients"
-          has_many  message_recipients,
-                      :as => :receiver,
-                      :class_name => options[:recipient_class]
-          
-          received_messages = "received_#{messages}"
-          unsent_messages = "unsent_#{messages}"
-          sent_messages = "sent_#{messages}"
-          
-          # Create received, unsent, and sent messages; message box
-          class_eval <<-end_eval
-            def #{received_messages}
-              #{message_recipients}.active.find_in_states(:all, :unread, :read, :include => :message, :conditions => ['messages.state_id = ?', Message.states.find_by_name('sent').id]).collect do |recipient|
-                ReceivedMessage.new(recipient)
-              end
-            end
-            
-            def #{unsent_messages}(*args)
-              #{messages}.active.unsent(*args)
-            end
-            
-            def #{sent_messages}(*args)
-              #{messages}.active.find_in_states(:all, :queued, :sent, *args)
-            end
-            
-            def #{message}_box
-              @#{message}_box ||= MessageBox.new(#{received_messages}, #{unsent_messages}, #{sent_messages})
-            end
-          end_eval
-        end
+      # Composed messages that have already been sent
+      def sent_messages
+        messages.with_states(%w(queued sent))
       end
     end
   end
 end
 
 ActiveRecord::Base.class_eval do
-  include PluginAWeek::Has::Messages
+  include PluginAWeek::HasMessages
 end

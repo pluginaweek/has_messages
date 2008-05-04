@@ -4,7 +4,7 @@ require 'rake/gempackagetask'
 require 'rake/contrib/sshpublisher'
 
 PKG_NAME           = 'has_messages'
-PKG_VERSION        = '0.0.1'
+PKG_VERSION        = '0.1.0'
 PKG_FILE_NAME      = "#{PKG_NAME}-#{PKG_VERSION}"
 RUBY_FORGE_PROJECT = 'pluginaweek'
 
@@ -14,7 +14,7 @@ task :default => :test
 desc 'Test the has_messages plugin.'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
-  t.pattern = 'test/unit/**/*_test.rb'
+  t.pattern = 'test/**/*_test.rb'
   t.verbose = true
 end
 
@@ -31,17 +31,16 @@ spec = Gem::Specification.new do |s|
   s.name            = PKG_NAME
   s.version         = PKG_VERSION
   s.platform        = Gem::Platform::RUBY
-  s.summary         = 'Adds support for messaging capabilities between ActiveRecord models.'
+  s.summary         = 'Demonstrates a reference implementation for sending messages between users.'
   
   s.files           = FileList['{app,db,lib,test}/**/*'].to_a + %w(CHANGELOG init.rb MIT-LICENSE Rakefile README)
   s.require_path    = 'lib'
   s.autorequire     = 'has_messages'
   s.has_rdoc        = true
   s.test_files      = Dir['test/**/*_test.rb']
-  s.add_dependency  'has_states', '>= 0.0.1'
-  s.add_dependency  'has_finder', '>= 0.1.5'
+  s.add_dependency  'state_machine', '>= 0.1.0'
   
-  s.author          = 'Aaron Pfeifer, Neil Abraham'
+  s.author          = 'Aaron Pfeifer'
   s.email           = 'info@pluginaweek.org'
   s.homepage        = 'http://www.pluginaweek.org'
 end
