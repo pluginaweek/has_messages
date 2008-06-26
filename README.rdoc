@@ -4,21 +4,21 @@
 
 == Resources
 
-Wiki
-
-* http://wiki.pluginaweek.org/Has_messages
-
 API
 
 * http://api.pluginaweek.org/has_messages
 
+Bugs
+
+* http://pluginaweek.lighthouseapp.com/projects/13274-has_messages
+
 Development
 
-* http://dev.pluginaweek.org/browser/trunk/has_messages
+* http://github.com/pluginaweek/has_messages
 
 Source
 
-* http://svn.pluginaweek.org/trunk/has_messages
+* git://github.com/pluginaweek/has_messages.git
 
 == Description
 
@@ -89,7 +89,7 @@ them like so:
 == Testing
 
 Before you can run any tests, the following gem must be installed:
-* plugin_test_helper[http://wiki.pluginaweek.org/Plugin_test_helper]
+* plugin_test_helper[http://github.com/pluginaweek/plugin_test_helper]
 
 To run against a specific version of Rails:
 
@@ -98,5 +98,5 @@ To run against a specific version of Rails:
 == Dependencies
 
 * Rails 2.1 or later
-* plugins_plus[http://wiki.pluginaweek.org/Plugins_plus]
-* state_machine[http://wiki.pluginaweek.org/State_machine]
+* plugins_plus[http://github.com/pluginaweek/plugins_plus]
+* state_machine[http://github.com/pluginaweek/state_machine]
