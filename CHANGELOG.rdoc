@@ -1,47 +1,30 @@
-*SVN*
+== master
 
-*0.1.1* (June 22nd, 2008)
+== 0.1.1 / 2008-06-22
 
 * Remove log files from gems
 
-*0.1.0* (May 5th, 2008)
+== 0.1.0 / 2008-05-05
 
 * Remove dependency on acts_as_list
-
 * Update to reflect changes from has_states to state_machine
-
 * Introduce an ActionMailer-type api for adding the various types of recipients
-
 * Update migrations to support Rails 2.0 syntax
-
 * Replace has_finder dependency with named_scope
-
 * Remove has_messages helper
-
 * Update documentation
 
-*0.0.1* (September 26th, 2007)
+== 0.0.1 / 2007-09-26
 
 * Add state_changes fixtures for tests
-
 * Use has_finder for tracking the deletion status of Messages/MessageRecipients
-
 * Message#forward and Message#reply should create new instances of the current class, not always Message
-
 * Add type field to MessageRecipient table
-
 * Allow message senders to not be model recipients in third-party plugins
-
 * Remove old references to Message::StateExtension
-
 * Update with dependency on custom_callbacks
-
 * Add documentation
-
 * Convert dos newlines to unix newlines
-
 * Move ReceiverMessage state into the MessageRecipient class
-
 * Moved Build extensions out of the MessageRecipient class
-
 * Fix determining whether classes exist in has_messages
