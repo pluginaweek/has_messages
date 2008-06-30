@@ -36,7 +36,7 @@ class UserTest < Test::Unit::TestCase
   def test_should_be_able_to_send_new_messages
     message = @user.messages.build
     message.to create_user(:login => 'John')
-    assert message.deliver!
+    assert message.deliver
   end
 end
 
@@ -44,7 +44,7 @@ class UserWithUnsentMessages < Test::Unit::TestCase
   def setup
     @user = create_user
     @sent_message = create_message(:sender => @user, :to => create_user(:login => 'you'))
-    @sent_message.deliver!
+    @sent_message.deliver
     @first_draft = create_message(:sender => @user)
     @second_draft = create_message(:sender => @user)
   end
@@ -65,10 +65,10 @@ class UserWithSentMessages < Test::Unit::TestCase
     @draft = create_message(:sender => @user)
     
     @first_sent_message = create_message(:sender => @user, :to => @to)
-    @first_sent_message.deliver!
+    @first_sent_message.deliver
     
     @second_sent_message = create_message(:sender => @user, :to => @to)
-    @second_sent_message.deliver!
+    @second_sent_message.deliver
   end
   
   def test_should_have_sent_messages
@@ -88,10 +88,10 @@ class UserWithReceivedMessages < Test::Unit::TestCase
     @unsent_message = create_message(:sender => @sender, :to => @user)
     
     @first_sent_message = create_message(:sender => @sender, :to => @user)
-    @first_sent_message.deliver!
+    @first_sent_message.deliver
     
     @second_sent_message = create_message(:sender => @sender, :to => @user)
-    @second_sent_message.deliver!
+    @second_sent_message.deliver
   end
   
   def test_should_have_received_messages
@@ -109,16 +109,16 @@ class UserWithHiddenMessagesTest < Test::Unit::TestCase
     @unsent_message = create_message(:sender => @user)
     
     hidden_sent_message = create_message(:sender => @user, :to => @friend)
-    hidden_sent_message.deliver!
+    hidden_sent_message.deliver
     hidden_sent_message.hide!
     @sent_message = create_message(:sender => @user, :to => @friend)
-    @sent_message.deliver!
+    @sent_message.deliver
     
     hidden_received_message = create_message(:sender => @friend, :to => @user)
-    hidden_received_message.deliver!
+    hidden_received_message.deliver
     hidden_received_message.recipients.first.hide!
     @received_message = create_message(:sender => @friend, :to => @user)
-    @received_message.deliver!
+    @received_message.deliver
   end
   
   def test_should_not_include_hidden_messages_in_messages

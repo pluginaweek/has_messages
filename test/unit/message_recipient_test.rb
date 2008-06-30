@@ -164,14 +164,14 @@ class MessageRecipientUnreadWithUnsentMessageTest < Test::Unit::TestCase
   end
   
   def test_should_not_be_able_to_view
-    assert !@recipient.view!
+    assert !@recipient.view
   end
 end
 
 class MessageRecipientUnreadWithSentMessageTest < Test::Unit::TestCase
   def setup
     @recipient = create_message_recipient
-    @recipient.message.deliver!
+    @recipient.message.deliver
   end
   
   def test_should_be_in_the_unread_state
@@ -179,15 +179,15 @@ class MessageRecipientUnreadWithSentMessageTest < Test::Unit::TestCase
   end
   
   def test_should_be_able_to_view
-    assert @recipient.view!
+    assert @recipient.view
   end
 end
 
 class MessageRecipientReadTest < Test::Unit::TestCase
   def setup
     @recipient = create_message_recipient
-    @recipient.message.deliver!
-    @recipient.view!
+    @recipient.message.deliver
+    @recipient.view
   end
   
   def test_should_be_in_the_read_state
@@ -195,7 +195,7 @@ class MessageRecipientReadTest < Test::Unit::TestCase
   end
   
   def test_should_not_be_able_to_view
-    assert !@recipient.view!
+    assert !@recipient.view
   end
 end
 

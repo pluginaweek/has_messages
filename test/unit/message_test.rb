@@ -156,11 +156,11 @@ class MessageWithoutRecipientsTest < Test::Unit::TestCase
   end
   
   def test_should_not_be_able_to_queue
-    assert !@message.queue!
+    assert !@message.queue
   end
   
   def test_should_not_be_able_to_deliver
-    assert !@message.deliver!
+    assert !@message.deliver
   end
 end
 
@@ -193,18 +193,18 @@ class MessageWithRecipientsTest < Test::Unit::TestCase
   end
   
   def test_should_be_able_to_queue
-    assert @message.queue!
+    assert @message.queue
   end
   
   def test_should_be_able_to_deliver
-    assert @message.deliver!
+    assert @message.deliver
   end
 end
 
 class MessageQueuedTest < Test::Unit::TestCase
   def setup
     @message = create_message(:to => create_user(:login => 'coward'))
-    @message.queue!
+    @message.queue
   end
   
   def test_should_be_in_the_queued_state
@@ -212,18 +212,18 @@ class MessageQueuedTest < Test::Unit::TestCase
   end
   
   def test_should_not_be_able_to_queue
-    assert !@message.queue!
+    assert !@message.queue
   end
   
   def test_should_be_able_to_deliver
-    assert @message.deliver!
+    assert @message.deliver
   end
 end
 
 class MessageDeliveredTest < Test::Unit::TestCase
   def setup
     @message = create_message(:to => create_user(:login => 'coward'))
-    @message.deliver!
+    @message.deliver
   end
   
   def test_should_be_in_the_sent_state
@@ -231,11 +231,11 @@ class MessageDeliveredTest < Test::Unit::TestCase
   end
   
   def test_should_not_be_able_to_queue
-    assert !@message.queue!
+    assert !@message.queue
   end
   
   def test_should_not_be_able_to_deliver
-    assert !@message.deliver!
+    assert !@message.deliver
   end
 end
 

@@ -23,8 +23,8 @@ module PluginAWeek #:nodoc:
       #   message.subject = 'Hello'
       #   message.body = 'How are you?'
       #   message.to User.find(456)
-      #   message.save!
-      #   message.deliver!
+      #   message.save
+      #   message.deliver
       # 
       # == Drafts
       # 

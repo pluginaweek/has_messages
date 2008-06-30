@@ -55,19 +55,19 @@ for more information about the asssociations that are generated from this macro.
   message.to user1, user2
   message.subject = 'Hey!'
   message.body = 'Does anyone want to go out tonight?'
-  message.deliver!
+  message.deliver
 
 === Replying to messages
 
   reply = message.reply_to_all
   reply.body = "I'd love to go out!"
-  reply.deliver!
+  reply.deliver
 
 === Forwarding messages
 
   forward = message.forward
   forward.body = 'Interested?'
-  forward.deliver!
+  forward.deliver
 
 === Processing messages asynchronously
 
@@ -75,15 +75,15 @@ In addition to delivering messages immediately, you can also *queue* messages so
 that an external application processes and delivers them.  This is especially
 useful for messages that need to be sent outside of the confines of the application.
 
-To queue messages for external processing, you can use the <tt>queue!</tt> event,
-rather than <tt>deliver!</tt>.  This will indicate to any external processes that
+To queue messages for external processing, you can use the +queue+ event,
+rather than +deliver+.  This will indicate to any external processes that
 the message is ready to be sent.
 
 To process queued emails, you need an external cron job that checks and sends
 them like so:
 
   Message.with_state('queued').each do |message|
-    message.deliver!
+    message.deliver
   end
 
 == Testing
