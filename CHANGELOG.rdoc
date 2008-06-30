@@ -2,7 +2,7 @@
 
 == 0.1.2 / 2008-06-29
 
-* Add compatiblity with state_machine 0.2.0
+* Add compatibility with state_machine 0.2.0
 
 == 0.1.1 / 2008-06-22
 
