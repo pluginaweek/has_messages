@@ -55,14 +55,16 @@ class MessageRecipient < ActiveRecord::Base
     end
   end
   
-  # Forwards the message
+  # Forwards this message, including the original subject and body in the new
+  # message
   def forward
     message = self.message.class.new(:subject => subject, :body => body)
     message.sender = receiver
     message
   end
   
-  # Replies to the message
+  # Replies to this message, including the original subject and body in the new
+  # message.  Only the original direct receivers are added to the reply.
   def reply
     message = self.message.class.new(:subject => subject, :body => body)
     message.sender = receiver
@@ -70,7 +72,9 @@ class MessageRecipient < ActiveRecord::Base
     message
   end
   
-  # Replies to all recipients on the message, including the original sender
+  # Replies to all recipients on this message, including the original subject
+  # and body in the new message.  All receivers (sender, direct, cc, and bcc) are
+  # added to the reply.
   def reply_to_all
     message = reply
     message.to(to - [receiver] + [sender])

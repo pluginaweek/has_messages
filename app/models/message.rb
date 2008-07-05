@@ -70,14 +70,16 @@ class Message < ActiveRecord::Base
   end
   alias_method :bcc=, :bcc
   
-  # Forwards this message
+  # Forwards this message, including the original subject and body in the new
+  # message
   def forward
     message = self.class.new(:subject => subject, :body => body)
     message.sender = sender
     message
   end
   
-  # Replies to this message
+  # Replies to this message, including the original subject and body in the new
+  # message.  Only the original direct receivers are added to the reply.
   def reply
     message = self.class.new(:subject => subject, :body => body)
     message.sender = sender
@@ -85,7 +87,9 @@ class Message < ActiveRecord::Base
     message
   end
   
-  # Replies to all recipients on this message
+  # Replies to all recipients on this message, including the original subject
+  # and body in the new message.  All receivers (direct, cc, and bcc) are added
+  # to the reply.
   def reply_to_all
     message = reply
     message.cc(cc)

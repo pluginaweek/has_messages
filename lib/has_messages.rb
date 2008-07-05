@@ -57,12 +57,14 @@ module PluginAWeek #:nodoc:
     end
     
     module InstanceMethods
-      # Composed messages that have not yet been sent
+      # Composed messages that have not yet been sent.  These consists of all
+      # messages that are currently in the "unsent" state.
       def unsent_messages
         messages.with_state('unsent')
       end
       
-      # Composed messages that have already been sent
+      # Composed messages that have already been sent.  These consists of all
+      # messages that are currently in the "queued" or "sent" states.
       def sent_messages
         messages.with_states(%w(queued sent))
       end
