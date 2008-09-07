@@ -13,7 +13,7 @@ spec = Gem::Specification.new do |s|
   s.require_path      = 'lib'
   s.has_rdoc          = true
   s.test_files        = Dir['test/**/*_test.rb']
-  s.add_dependency    'state_machine', '>= 0.2.0'
+  s.add_dependency    'state_machine', '>= 0.3.0'
   
   s.author            = 'Aaron Pfeifer'
   s.email             = 'aaron@pluginaweek.org'
