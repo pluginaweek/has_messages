@@ -1,5 +1,7 @@
 == master
 
+== 0.1.3 / 2008-09-07
+
 * Add dependency on state_machine 0.3.0
 
 == 0.1.2 / 2008-06-29
