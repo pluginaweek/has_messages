@@ -3,12 +3,6 @@ require 'state_machine'
 module PluginAWeek #:nodoc:
   # Adds a generic implementation for sending messages between users
   module HasMessages
-    def self.included(base) #:nodoc:
-      base.class_eval do
-        extend PluginAWeek::HasMessages::MacroMethods
-      end
-    end
-    
     module MacroMethods
       # Creates the following message associations:
       # * +messages+ - Messages that were composed and are visible to the owner.  Mesages may have been sent or unsent.
@@ -73,5 +67,5 @@ module PluginAWeek #:nodoc:
 end
 
 ActiveRecord::Base.class_eval do
-  include PluginAWeek::HasMessages
+  extend PluginAWeek::HasMessages::MacroMethods
 end
