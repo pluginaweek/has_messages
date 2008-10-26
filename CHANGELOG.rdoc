@@ -1,5 +1,7 @@
 == master
 
+== 0.2.0 / 2008-10-26
+
 * Add mass-assignment protection in the Message/MessageRecipient models
 * Change how the base module is included to prevent namespacing conflicts
 

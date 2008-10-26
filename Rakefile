@@ -5,7 +5,7 @@ require 'rake/contrib/sshpublisher'
 
 spec = Gem::Specification.new do |s|
   s.name              = 'has_messages'
-  s.version           = '0.1.3'
+  s.version           = '0.2.0'
   s.platform          = Gem::Platform::RUBY
   s.summary           = 'Demonstrates a reference implementation for sending messages between users.'
   
