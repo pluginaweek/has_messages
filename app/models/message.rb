@@ -33,6 +33,10 @@ class Message < ActiveRecord::Base
                         :sender_id,
                         :sender_type
   
+  attr_accessible :subject,
+                  :body,
+                  :to, :cc, :bcc
+  
   after_save :update_recipients
   
   named_scope :visible,

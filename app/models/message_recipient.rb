@@ -31,6 +31,10 @@ class MessageRecipient < ActiveRecord::Base
                         :receiver_id,
                         :receiver_type
   
+  attr_protected  :state,
+                  :position,
+                  :hidden_at
+  
   before_create :set_position
   before_destroy :reorder_positions
   

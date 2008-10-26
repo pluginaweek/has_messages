@@ -60,6 +60,32 @@ class MessageTest < Test::Unit::TestCase
     message = new_message(:body => nil)
     assert message.valid?
   end
+  
+  def test_should_protect_attributes_from_mass_assignment
+    message = Message.new(
+      :id => 1,
+      :sender_id => 1,
+      :sender_type => 'User',
+      :subject => 'New features',
+      :body => 'Find out more!',
+      :to => [1, 2],
+      :cc => [3, 4],
+      :bcc => [5, 6],
+      :state => 'sent',
+      :hidden_at => Time.now
+    )
+    
+    assert_nil message.id
+    assert_nil message.sender_id
+    assert message.sender_type.blank?
+    assert_equal 'New features', message.subject
+    assert_equal 'Find out more!', message.body
+    assert_equal [1, 2], message.to
+    assert_equal [3, 4], message.cc
+    assert_equal [5, 6], message.bcc
+    assert_equal 'unsent', message.state
+    assert_nil message.hidden_at
+  end
 end
 
 class MessageBeforeBeingCreatedTest < Test::Unit::TestCase

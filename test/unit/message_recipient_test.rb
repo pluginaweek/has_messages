@@ -75,6 +75,28 @@ class MesageRecipientTest < Test::Unit::TestCase
     recipient = new_message_recipient(:position => nil)
     assert recipient.valid?
   end
+  
+  def test_should_protect_attributes_from_mass_assignment
+    recipient = MessageRecipient.new(
+      :id => 1,
+      :message_id => 1,
+      :receiver_id => 1,
+      :receiver_type => 'User',
+      :kind => 'bcc',
+      :position => 10,
+      :state => 'read',
+      :hidden_at => Time.now
+    )
+    
+    assert_nil recipient.id
+    assert_equal 1, recipient.message_id
+    assert_equal 1, recipient.receiver_id
+    assert_equal 'User', recipient.receiver_type
+    assert_equal 'bcc', recipient.kind
+    assert_nil recipient.position
+    assert_equal 'unread', recipient.state
+    assert_nil recipient.hidden_at
+  end
 end
 
 class MessageRecipientAfterBeingCreatedTest < Test::Unit::TestCase
