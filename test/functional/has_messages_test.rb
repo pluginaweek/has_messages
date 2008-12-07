@@ -105,18 +105,18 @@ class UserWithHiddenMessagesTest < Test::Unit::TestCase
     @friend = create_user(:login => 'you')
     
     hidden_unsent_message = create_message(:sender => @user)
-    hidden_unsent_message.hide!
+    hidden_unsent_message.hide
     @unsent_message = create_message(:sender => @user)
     
     hidden_sent_message = create_message(:sender => @user, :to => @friend)
     hidden_sent_message.deliver
-    hidden_sent_message.hide!
+    hidden_sent_message.hide
     @sent_message = create_message(:sender => @user, :to => @friend)
     @sent_message.deliver
     
     hidden_received_message = create_message(:sender => @friend, :to => @user)
     hidden_received_message.deliver
-    hidden_received_message.recipients.first.hide!
+    hidden_received_message.recipients.first.hide
     @received_message = create_message(:sender => @friend, :to => @user)
     @received_message.deliver
   end

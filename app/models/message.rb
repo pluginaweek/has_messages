@@ -11,16 +11,16 @@
 # 
 # In order to perform actions on the message, such as queueing or delivering,
 # you should always use the associated event action:
-# * +queue!+ - Queues the message so that you can send it in a separate process
-# * +deliver!+ - Sends the message to all of the recipients
+# * +queue+ - Queues the message so that you can send it in a separate process
+# * +deliver+ - Sends the message to all of the recipients
 # 
 # == Hiding messages
 # 
 # Although you can delete a message, it will also delete it from the inbox of all
 # the message's recipients.  Instead, you can hide messages from users with the
 # following actions:
-# * +hide!+ -Hides the message from the sender's inbox
-# * +unhide!+ - Makes the message visible again
+# * +hide+ -Hides the message from the sender's inbox
+# * +unhide+ - Makes the message visible again
 class Message < ActiveRecord::Base
   belongs_to  :sender,
                 :polymorphic => true
@@ -102,12 +102,12 @@ class Message < ActiveRecord::Base
   end
   
   # Hides the message from the sender's inbox
-  def hide!
+  def hide
     update_attribute(:hidden_at, Time.now)
   end
   
   # Makes the message visible in the sender's inbox
-  def unhide!
+  def unhide
     update_attribute(:hidden_at, nil)
   end
   

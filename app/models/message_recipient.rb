@@ -11,15 +11,15 @@
 # 
 # In order to perform actions on the message, such as viewing, you should always
 # use the associated event action:
-# * +view!+ - Marks the message as read by the recipient
+# * +view+ - Marks the message as read by the recipient
 # 
 # == Hiding messages
 # 
 # Although you can delete a recipient, it will also delete it from everyone else's
 # message, meaning that no one will know that person was ever a recipient of the
 # message.  Instead, you can hide messages from users with the following actions:
-# * +hide!+ -Hides the message from the recipient's inbox
-# * +unhide!+ - Makes the message visible again
+# * +hide+ -Hides the message from the recipient's inbox
+# * +unhide+ - Makes the message visible again
 class MessageRecipient < ActiveRecord::Base
   belongs_to  :message
   belongs_to  :receiver,
@@ -88,12 +88,12 @@ class MessageRecipient < ActiveRecord::Base
   end
   
   # Hides the message from the recipient's inbox
-  def hide!
+  def hide
     update_attribute(:hidden_at, Time.now)
   end
   
   # Makes the message visible in the recipient's inbox
-  def unhide!
+  def unhide
     update_attribute(:hidden_at, nil)
   end
   

@@ -44,31 +44,31 @@ class MesageRecipientTest < Test::Unit::TestCase
   def test_should_require_a_message
     recipient = new_message_recipient(:message => nil)
     assert !recipient.valid?
-    assert_equal 1, Array(recipient.errors.on(:message_id)).size
+    assert recipient.errors.invalid?(:message_id)
   end
   
   def test_should_require_a_kind
     recipient = new_message_recipient(:kind => nil)
     assert !recipient.valid?
-    assert_equal 1, Array(recipient.errors.on(:kind)).size
+    assert recipient.errors.invalid?(:kind)
   end
   
   def test_should_require_a_state
     recipient = new_message_recipient(:state => nil)
     assert !recipient.valid?
-    assert_equal 1, Array(recipient.errors.on(:state)).size
+    assert recipient.errors.invalid?(:state)
   end
   
   def test_should_require_a_receiver_id
     recipient = new_message_recipient(:receiver => nil)
     assert !recipient.valid?
-    assert_equal 1, Array(recipient.errors.on(:receiver_id)).size
+    assert recipient.errors.invalid?(:receiver_id)
   end
   
   def test_should_require_a_receiver_type
     recipient = new_message_recipient(:receiver => nil)
     assert !recipient.valid?
-    assert_equal 1, Array(recipient.errors.on(:receiver_type)).size
+    assert recipient.errors.invalid?(:receiver_type)
   end
   
   def test_should_not_require_a_position
@@ -224,7 +224,7 @@ end
 class MessageRecipientHiddenTest < Test::Unit::TestCase
   def setup
     @recipient = create_message_recipient
-    @recipient.hide!
+    @recipient.hide
   end
   
   def test_should_record_when_it_was_hidden
@@ -239,8 +239,8 @@ end
 class MessageRecipientUnhiddenTest < Test::Unit::TestCase
   def setup
     @recipient = create_message_recipient
-    @recipient.hide!
-    @recipient.unhide!
+    @recipient.hide
+    @recipient.unhide
   end
   
   def test_should_not_have_the_recorded_value_when_it_was_hidden

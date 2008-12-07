@@ -36,19 +36,19 @@ class MessageTest < Test::Unit::TestCase
   def test_should_require_a_sender_id
     message = new_message(:sender => nil)
     assert !message.valid?
-    assert_equal 1, Array(message.errors.on(:sender_id)).size
+    assert message.errors.invalid?(:sender_id)
   end
   
   def test_should_require_a_sender_type
     message = new_message(:sender => nil)
     assert !message.valid?
-    assert_equal 1, Array(message.errors.on(:sender_type)).size
+    assert message.errors.invalid?(:sender_type)
   end
   
   def test_should_require_a_state
     message = new_message(:state => nil)
     assert !message.valid?
-    assert_equal 1, Array(message.errors.on(:state)).size
+    assert message.errors.invalid?(:state)
   end
   
   def test_should_not_require_a_subject
@@ -268,7 +268,7 @@ end
 class MessageHiddenTest < Test::Unit::TestCase
   def setup
     @message = create_message
-    @message.hide!
+    @message.hide
   end
   
   def test_should_record_when_it_was_hidden
@@ -283,8 +283,8 @@ end
 class MessageUnhiddenTest < Test::Unit::TestCase
   def setup
     @message = create_message
-    @message.hide!
-    @message.unhide!
+    @message.hide
+    @message.unhide
   end
   
   def test_should_not_have_the_recorded_value_when_it_was_hidden

@@ -1,5 +1,7 @@
 == master
 
+* Rename Message#hide!/unhide! to Message#hide/unhide and MessageRecipient#hide!/unhide! to MessageRecipient#hide/unhide
+
 == 0.2.0 / 2008-10-26
 
 * Add mass-assignment protection in the Message/MessageRecipient models
