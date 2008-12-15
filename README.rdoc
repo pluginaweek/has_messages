@@ -46,7 +46,7 @@ This will build the following associations:
 * +received_messages+
 
 If you have more specified needs, you can create the same associations manually
-that +has_messages+ builds.  See PluginAWeek::HasMessages::MacroMethods#has_messages
+that +has_messages+ builds.  See HasMessages::MacroMethods#has_messages
 for more information about the asssociations that are generated from this macro.
 
 === Creating new messages
