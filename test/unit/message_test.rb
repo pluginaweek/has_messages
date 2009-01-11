@@ -278,6 +278,10 @@ class MessageHiddenTest < Test::Unit::TestCase
   def test_should_be_hidden
     assert @message.hidden?
   end
+  
+  def test_should_not_be_visible
+    assert !@message.visible?
+  end
 end
 
 class MessageUnhiddenTest < Test::Unit::TestCase
@@ -293,6 +297,10 @@ class MessageUnhiddenTest < Test::Unit::TestCase
   
   def test_should_not_be_hidden
     assert !@message.hidden?
+  end
+  
+  def test_should_be_visible
+    assert @message.visible?
   end
 end
 

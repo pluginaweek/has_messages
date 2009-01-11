@@ -17,8 +17,13 @@
 # 
 # Although you can delete a recipient, it will also delete it from everyone else's
 # message, meaning that no one will know that person was ever a recipient of the
-# message.  Instead, you can hide messages from users with the following actions:
-# * +hide+ -Hides the message from the recipient's inbox
+# message.  Instead, you can change the *visibility* of the message.  Messages
+# have 1 of 2 states that define its visibility:
+# * +visible+ - The message is visible to the recipient
+# * +hidden+ - The message is hidden from the recipient
+# 
+# The visibility of a message can be changed by running the associated action:
+# * +hide+ -Hides the message from the recipient
 # * +unhide+ - Makes the message visible again
 class MessageRecipient < ActiveRecord::Base
   belongs_to  :message
@@ -52,11 +57,28 @@ class MessageRecipient < ActiveRecord::Base
   named_scope :visible,
                 :conditions => {:hidden_at => nil}
   
-  state_machine :state, :initial => 'unread' do
+  # Defines actions for the recipient
+  state_machine :state, :initial => :unread do
     # Indicates that the message has been viewed by the receiver
     event :view do
-      transition :to => 'read', :from => 'unread', :if => :message_sent?
+      transition :to => :read, :from => :unread, :if => :message_sent?
     end
+  end
+  
+  # Defines actions for the visibility of the message to the recipient
+  state_machine :hidden_at, :initial => :visible do
+    # Hides the message from the recipient's inbox
+    event :hide do
+      transition :to => :hidden
+    end
+    
+    # Makes the message visible in the recipient's inbox
+    event :unhide do
+      transition :to => :visible
+    end
+    
+    state :visible, :value => nil
+    state :hidden, :value => lambda {Time.now}, :if => lambda {|value| value}
   end
   
   # Forwards this message, including the original subject and body in the new
@@ -87,25 +109,10 @@ class MessageRecipient < ActiveRecord::Base
     message
   end
   
-  # Hides the message from the recipient's inbox
-  def hide
-    update_attribute(:hidden_at, Time.now)
-  end
-  
-  # Makes the message visible in the recipient's inbox
-  def unhide
-    update_attribute(:hidden_at, nil)
-  end
-  
-  # Is this message still hidden from the recipient's inbox?
-  def hidden?
-    hidden_at?
-  end
-  
   private
     # Has the message this recipient is on been sent?
     def message_sent?
-      message.state == 'sent'
+      message.sent?
     end
     
     # Sets the position of the current recipient based on existing recipients

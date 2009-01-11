@@ -234,6 +234,10 @@ class MessageRecipientHiddenTest < Test::Unit::TestCase
   def test_should_be_hidden
     assert @recipient.hidden?
   end
+  
+  def test_should_not_be_visible
+    assert !@recipient.visible?
+  end
 end
 
 class MessageRecipientUnhiddenTest < Test::Unit::TestCase
@@ -249,6 +253,10 @@ class MessageRecipientUnhiddenTest < Test::Unit::TestCase
   
   def test_should_not_be_hidden
     assert !@recipient.hidden?
+  end
+  
+  def test_should_be_visible
+    assert @recipient.visible?
   end
 end
 

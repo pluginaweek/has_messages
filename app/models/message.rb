@@ -14,12 +14,16 @@
 # * +queue+ - Queues the message so that you can send it in a separate process
 # * +deliver+ - Sends the message to all of the recipients
 # 
-# == Hiding messages
+# == Message visibility
 # 
 # Although you can delete a message, it will also delete it from the inbox of all
-# the message's recipients.  Instead, you can hide messages from users with the
-# following actions:
-# * +hide+ -Hides the message from the sender's inbox
+# the message's recipients.  Instead, you can change the *visibility* of the
+# message.  Messages have 1 of 2 states that define its visibility:
+# * +visible+ - The message is visible to the sender
+# * +hidden+ - The message is hidden from the sender
+# 
+# The visibility of a message can be changed by running the associated action:
+# * +hide+ -Hides the message from the sender
 # * +unhide+ - Makes the message visible again
 class Message < ActiveRecord::Base
   belongs_to  :sender,
@@ -43,17 +47,33 @@ class Message < ActiveRecord::Base
                 :conditions => {:hidden_at => nil}
   
   # Define actions for the message
-  state_machine :state, :initial => 'unsent' do
+  state_machine :state, :initial => :unsent do
     # Queues the message so that it's sent in a separate process
     event :queue do
-      transition :to => 'queued', :from => 'unsent', :if => :has_recipients?
+      transition :to => :queued, :from => :unsent, :if => :has_recipients?
     end
     
     # Sends the message to all of the recipients as long as at least one
     # recipient has been added
     event :deliver do
-      transition :to => 'sent', :from => %w(unsent queued), :if => :has_recipients?
+      transition :to => :sent, :from => [:unsent, :queued], :if => :has_recipients?
     end
+  end
+  
+  # Defines actions for the visibility of the message
+  state_machine :hidden_at, :initial => :visible do
+    # Hides the message from the recipient's inbox
+    event :hide do
+      transition :to => :hidden
+    end
+    
+    # Makes the message visible in the recipient's inbox
+    event :unhide do
+      transition :to => :visible
+    end
+    
+    state :visible, :value => nil
+    state :hidden, :value => lambda {Time.now}, :if => lambda {|value| value}
   end
   
   # Directly adds the receivers on the message (i.e. they are visible to all recipients)
@@ -99,21 +119,6 @@ class Message < ActiveRecord::Base
     message.cc(cc)
     message.bcc(bcc)
     message
-  end
-  
-  # Hides the message from the sender's inbox
-  def hide
-    update_attribute(:hidden_at, Time.now)
-  end
-  
-  # Makes the message visible in the sender's inbox
-  def unhide
-    update_attribute(:hidden_at, nil)
-  end
-  
-  # Is this message still hidden from the sender's inbox?
-  def hidden?
-    hidden_at?
   end
   
   private

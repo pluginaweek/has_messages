@@ -1,5 +1,8 @@
 == master
 
+* Use a state machine for the hidden_at field on Message/MessageRecipient
+* Add dependency on state_machine 0.5.0
+
 == 0.3.0 / 2008-12-14
 
 * Remove the PluginAWeek namespace
