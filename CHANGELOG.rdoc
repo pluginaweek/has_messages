@@ -1,5 +1,7 @@
 == master
 
+== 0.4.0 / 2009-04-19
+
 * Add dependency on Rails 2.3
 * Add dependency on plugin_test_helper 0.3.0
 * Add dependency on state_machine 0.7.0
