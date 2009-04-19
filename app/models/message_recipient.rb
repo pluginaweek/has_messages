@@ -27,41 +27,26 @@
 # * +unhide+ - Makes the message visible again
 class MessageRecipient < ActiveRecord::Base
   belongs_to  :message
-  belongs_to  :receiver,
-                :polymorphic => true
+  belongs_to  :receiver, :polymorphic => true
   
-  validates_presence_of :message_id,
-                        :kind,
-                        :state,
-                        :receiver_id,
-                        :receiver_type
+  validates_presence_of :message_id, :kind, :state, :receiver_id, :receiver_type
   
-  attr_protected  :state,
-                  :position,
-                  :hidden_at
+  attr_protected :state, :position, :hidden_at
   
   before_create :set_position
   before_destroy :reorder_positions
   
   # Make this class look like the actual message
-  delegate  :sender,
-            :subject,
-            :body,
-            :recipients,
-            :to,
-            :cc,
-            :bcc,
-            :created_at,
+  delegate  :sender, :subject, :body, :recipients, :to, :cc, :bcc, :created_at,
               :to => :message
   
-  named_scope :visible,
-                :conditions => {:hidden_at => nil}
+  named_scope :visible, :conditions => {:hidden_at => nil}
   
   # Defines actions for the recipient
   state_machine :state, :initial => :unread do
     # Indicates that the message has been viewed by the receiver
     event :view do
-      transition :to => :read, :from => :unread, :if => :message_sent?
+      transition :unread => :read, :if => :message_sent?
     end
   end
   
@@ -69,12 +54,12 @@ class MessageRecipient < ActiveRecord::Base
   state_machine :hidden_at, :initial => :visible do
     # Hides the message from the recipient's inbox
     event :hide do
-      transition :to => :hidden
+      transition all => :hidden
     end
     
     # Makes the message visible in the recipient's inbox
     event :unhide do
-      transition :to => :visible
+      transition all => :visible
     end
     
     state :visible, :value => nil

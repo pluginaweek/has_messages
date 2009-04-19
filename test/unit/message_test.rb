@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
-class MessageByDefaultTest < Test::Unit::TestCase
+class MessageByDefaultTest < ActiveSupport::TestCase
   def setup
     @message = Message.new
   end
@@ -27,7 +27,7 @@ class MessageByDefaultTest < Test::Unit::TestCase
   end
 end
 
-class MessageTest < Test::Unit::TestCase
+class MessageTest < ActiveSupport::TestCase
   def test_should_be_valid_with_a_set_of_valid_attributes
     message = new_message
     assert message.valid?
@@ -88,7 +88,7 @@ class MessageTest < Test::Unit::TestCase
   end
 end
 
-class MessageBeforeBeingCreatedTest < Test::Unit::TestCase
+class MessageBeforeBeingCreatedTest < ActiveSupport::TestCase
   def setup
     @message = new_message
   end
@@ -128,7 +128,7 @@ class MessageBeforeBeingCreatedTest < Test::Unit::TestCase
   end
 end
 
-class MesageAfterBeingCreatedTest < Test::Unit::TestCase
+class MesageAfterBeingCreatedTest < ActiveSupport::TestCase
   def setup
     @message = create_message
   end
@@ -176,7 +176,7 @@ class MesageAfterBeingCreatedTest < Test::Unit::TestCase
   end
 end
 
-class MessageWithoutRecipientsTest < Test::Unit::TestCase
+class MessageWithoutRecipientsTest < ActiveSupport::TestCase
   def setup
     @message = create_message
   end
@@ -190,7 +190,7 @@ class MessageWithoutRecipientsTest < Test::Unit::TestCase
   end
 end
 
-class MessageWithRecipientsTest < Test::Unit::TestCase
+class MessageWithRecipientsTest < ActiveSupport::TestCase
   def setup
     @erich = create_user(:login => 'Erich')
     @richard = create_user(:login => 'Richard')
@@ -227,7 +227,7 @@ class MessageWithRecipientsTest < Test::Unit::TestCase
   end
 end
 
-class MessageQueuedTest < Test::Unit::TestCase
+class MessageQueuedTest < ActiveSupport::TestCase
   def setup
     @message = create_message(:to => create_user(:login => 'coward'))
     @message.queue
@@ -246,7 +246,7 @@ class MessageQueuedTest < Test::Unit::TestCase
   end
 end
 
-class MessageDeliveredTest < Test::Unit::TestCase
+class MessageDeliveredTest < ActiveSupport::TestCase
   def setup
     @message = create_message(:to => create_user(:login => 'coward'))
     @message.deliver
@@ -265,7 +265,7 @@ class MessageDeliveredTest < Test::Unit::TestCase
   end
 end
 
-class MessageHiddenTest < Test::Unit::TestCase
+class MessageHiddenTest < ActiveSupport::TestCase
   def setup
     @message = create_message
     @message.hide
@@ -284,7 +284,7 @@ class MessageHiddenTest < Test::Unit::TestCase
   end
 end
 
-class MessageUnhiddenTest < Test::Unit::TestCase
+class MessageUnhiddenTest < ActiveSupport::TestCase
   def setup
     @message = create_message
     @message.hide
@@ -304,7 +304,7 @@ class MessageUnhiddenTest < Test::Unit::TestCase
   end
 end
 
-class MessageForwardedTest < Test::Unit::TestCase
+class MessageForwardedTest < ActiveSupport::TestCase
   def setup
     @admin = create_user(:login => 'admin')
     original_message = create_message(
@@ -351,7 +351,7 @@ class MessageForwardedTest < Test::Unit::TestCase
   end
 end
 
-class MessageRepliedTest < Test::Unit::TestCase
+class MessageRepliedTest < ActiveSupport::TestCase
   def setup
     @admin = create_user(:login => 'admin')
     @erich = create_user(:login => 'Erich')
@@ -402,7 +402,7 @@ class MessageRepliedTest < Test::Unit::TestCase
   end
 end
 
-class MessageRepliedToAllTest < Test::Unit::TestCase
+class MessageRepliedToAllTest < ActiveSupport::TestCase
   def setup
     @admin = create_user(:login => 'admin')
     @erich = create_user(:login => 'Erich')
@@ -453,7 +453,7 @@ class MessageRepliedToAllTest < Test::Unit::TestCase
   end
 end
 
-class MessageAsAClassTest < Test::Unit::TestCase
+class MessageAsAClassTest < ActiveSupport::TestCase
   def setup
     @hidden_message = create_message(:hidden_at => Time.now)
     @visible_message = create_message

@@ -4,12 +4,15 @@ require 'state_machine'
 module HasMessages
   module MacroMethods
     # Creates the following message associations:
-    # * +messages+ - Messages that were composed and are visible to the owner.  Mesages may have been sent or unsent.
-    # * +received_messages - Messages that have been received from others and are visible.  Messages may have been read or unread.
+    # * +messages+ - Messages that were composed and are visible to the owner.
+    #   Mesages may have been sent or unsent.
+    # * +received_messages - Messages that have been received from others and
+    #   are visible.  Messages may have been read or unread.
     # 
     # == Creating new messages
     # 
-    # To create a new message, the +messages+ association should be used, for example:
+    # To create a new message, the +messages+ association should be used,
+    # for example:
     # 
     #   user = User.find(123)
     #   message = user.messages.build

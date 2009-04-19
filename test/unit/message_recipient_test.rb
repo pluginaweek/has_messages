@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
-class MessageRecipientByDefaultTest < Test::Unit::TestCase
+class MessageRecipientByDefaultTest < ActiveSupport::TestCase
   def setup
     @recipient = MessageRecipient.new
   end
@@ -35,7 +35,7 @@ class MessageRecipientByDefaultTest < Test::Unit::TestCase
   end
 end
 
-class MesageRecipientTest < Test::Unit::TestCase
+class MesageRecipientTest < ActiveSupport::TestCase
   def test_should_be_valid_with_a_set_of_valid_attributes
     recipient = new_message_recipient
     assert recipient.valid?
@@ -99,7 +99,7 @@ class MesageRecipientTest < Test::Unit::TestCase
   end
 end
 
-class MessageRecipientAfterBeingCreatedTest < Test::Unit::TestCase
+class MessageRecipientAfterBeingCreatedTest < ActiveSupport::TestCase
   def setup
     @admin = create_user(:login => 'admin')
     @erich = create_user(:login => 'Erich')
@@ -157,7 +157,7 @@ class MessageRecipientAfterBeingCreatedTest < Test::Unit::TestCase
   end
 end
 
-class MessageRecipientOfMultipleTest < Test::Unit::TestCase
+class MessageRecipientOfMultipleTest < ActiveSupport::TestCase
   def setup
     @erich = create_user(:login => 'Erich')
     @richard = create_user(:login => 'Richard')
@@ -176,7 +176,7 @@ class MessageRecipientOfMultipleTest < Test::Unit::TestCase
   end
 end
 
-class MessageRecipientUnreadWithUnsentMessageTest < Test::Unit::TestCase
+class MessageRecipientUnreadWithUnsentMessageTest < ActiveSupport::TestCase
   def setup
     @recipient = create_message_recipient
   end
@@ -190,7 +190,7 @@ class MessageRecipientUnreadWithUnsentMessageTest < Test::Unit::TestCase
   end
 end
 
-class MessageRecipientUnreadWithSentMessageTest < Test::Unit::TestCase
+class MessageRecipientUnreadWithSentMessageTest < ActiveSupport::TestCase
   def setup
     @recipient = create_message_recipient
     @recipient.message.deliver
@@ -205,7 +205,7 @@ class MessageRecipientUnreadWithSentMessageTest < Test::Unit::TestCase
   end
 end
 
-class MessageRecipientReadTest < Test::Unit::TestCase
+class MessageRecipientReadTest < ActiveSupport::TestCase
   def setup
     @recipient = create_message_recipient
     @recipient.message.deliver
@@ -221,7 +221,7 @@ class MessageRecipientReadTest < Test::Unit::TestCase
   end
 end
 
-class MessageRecipientHiddenTest < Test::Unit::TestCase
+class MessageRecipientHiddenTest < ActiveSupport::TestCase
   def setup
     @recipient = create_message_recipient
     @recipient.hide
@@ -240,7 +240,7 @@ class MessageRecipientHiddenTest < Test::Unit::TestCase
   end
 end
 
-class MessageRecipientUnhiddenTest < Test::Unit::TestCase
+class MessageRecipientUnhiddenTest < ActiveSupport::TestCase
   def setup
     @recipient = create_message_recipient
     @recipient.hide
@@ -260,7 +260,7 @@ class MessageRecipientUnhiddenTest < Test::Unit::TestCase
   end
 end
 
-class MessageRecipientForwardedTest < Test::Unit::TestCase
+class MessageRecipientForwardedTest < ActiveSupport::TestCase
   def setup
     @erich = create_user(:login => 'Erich')
     original_message = create_message(
@@ -309,7 +309,7 @@ class MessageRecipientForwardedTest < Test::Unit::TestCase
   end
 end
 
-class MessageRecipientRepliedTest < Test::Unit::TestCase
+class MessageRecipientRepliedTest < ActiveSupport::TestCase
   def setup
     @erich = create_user(:login => 'Erich')
     @john = create_user(:login => 'John')
@@ -360,7 +360,7 @@ class MessageRecipientRepliedTest < Test::Unit::TestCase
   end
 end
 
-class MessageRecipientRepliedToAllTest < Test::Unit::TestCase
+class MessageRecipientRepliedToAllTest < ActiveSupport::TestCase
   def setup
     @erich = create_user(:login => 'Erich')
     @john = create_user(:login => 'John')
@@ -413,7 +413,7 @@ class MessageRecipientRepliedToAllTest < Test::Unit::TestCase
   end
 end
 
-class MessageRecipientAfterBeingDestroyedTest < Test::Unit::TestCase
+class MessageRecipientAfterBeingDestroyedTest < ActiveSupport::TestCase
   def setup
     message = create_message
     @first_recipient = create_message_recipient(
@@ -436,7 +436,7 @@ class MessageRecipientAfterBeingDestroyedTest < Test::Unit::TestCase
   end
 end
 
-class MessageRecipientAsAClassTest < Test::Unit::TestCase
+class MessageRecipientAsAClassTest < ActiveSupport::TestCase
   def setup
     message = create_message
     @hidden_recipient = create_message_recipient(:message => message, :receiver => create_user(:login => 'erich'), :hidden_at => Time.now)

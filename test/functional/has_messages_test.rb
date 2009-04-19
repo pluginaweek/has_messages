@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
-class UserByDefaultTest < Test::Unit::TestCase
+class UserByDefaultTest < ActiveSupport::TestCase
   def setup
     @user = create_user
   end
@@ -22,7 +22,7 @@ class UserByDefaultTest < Test::Unit::TestCase
   end
 end
 
-class UserTest < Test::Unit::TestCase
+class UserTest < ActiveSupport::TestCase
   def setup
     @user = create_user
   end
@@ -40,7 +40,7 @@ class UserTest < Test::Unit::TestCase
   end
 end
 
-class UserWithUnsentMessages < Test::Unit::TestCase
+class UserWithUnsentMessages < ActiveSupport::TestCase
   def setup
     @user = create_user
     @sent_message = create_message(:sender => @user, :to => create_user(:login => 'you'))
@@ -58,7 +58,7 @@ class UserWithUnsentMessages < Test::Unit::TestCase
   end
 end
 
-class UserWithSentMessages < Test::Unit::TestCase
+class UserWithSentMessages < ActiveSupport::TestCase
   def setup
     @user = create_user
     @to = create_user(:login => 'you')
@@ -80,7 +80,7 @@ class UserWithSentMessages < Test::Unit::TestCase
   end
 end
 
-class UserWithReceivedMessages < Test::Unit::TestCase
+class UserWithReceivedMessages < ActiveSupport::TestCase
   def setup
     @sender = create_user
     @user = create_user(:login => 'me')
@@ -99,7 +99,7 @@ class UserWithReceivedMessages < Test::Unit::TestCase
   end
 end
 
-class UserWithHiddenMessagesTest < Test::Unit::TestCase
+class UserWithHiddenMessagesTest < ActiveSupport::TestCase
   def setup
     @user = create_user
     @friend = create_user(:login => 'you')

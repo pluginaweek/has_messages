@@ -1,5 +1,9 @@
 == master
 
+* Add dependency on Rails 2.3
+* Add dependency on plugin_test_helper 0.3.0
+* Add dependency on state_machine 0.7.0
+
 == 0.3.1 / 2009-01-11
 
 * Use a state machine for the hidden_at field on Message/MessageRecipient

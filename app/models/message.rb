@@ -26,37 +26,28 @@
 # * +hide+ -Hides the message from the sender
 # * +unhide+ - Makes the message visible again
 class Message < ActiveRecord::Base
-  belongs_to  :sender,
-                :polymorphic => true
-  has_many    :recipients,
-                :class_name => 'MessageRecipient',
-                :order => 'kind DESC, position ASC',
-                :dependent => :destroy
+  belongs_to  :sender, :polymorphic => true
+  has_many    :recipients, :class_name => 'MessageRecipient', :order => 'kind DESC, position ASC', :dependent => :destroy
   
-  validates_presence_of :state,
-                        :sender_id,
-                        :sender_type
+  validates_presence_of :state, :sender_id, :sender_type
   
-  attr_accessible :subject,
-                  :body,
-                  :to, :cc, :bcc
+  attr_accessible :subject, :body, :to, :cc, :bcc
   
   after_save :update_recipients
   
-  named_scope :visible,
-                :conditions => {:hidden_at => nil}
+  named_scope :visible, :conditions => {:hidden_at => nil}
   
   # Define actions for the message
   state_machine :state, :initial => :unsent do
     # Queues the message so that it's sent in a separate process
     event :queue do
-      transition :to => :queued, :from => :unsent, :if => :has_recipients?
+      transition :unsent => :queued, :if => :has_recipients?
     end
     
     # Sends the message to all of the recipients as long as at least one
     # recipient has been added
     event :deliver do
-      transition :to => :sent, :from => [:unsent, :queued], :if => :has_recipients?
+      transition [:unsent, :queued] => :sent, :if => :has_recipients?
     end
   end
   
@@ -64,12 +55,12 @@ class Message < ActiveRecord::Base
   state_machine :hidden_at, :initial => :visible do
     # Hides the message from the recipient's inbox
     event :hide do
-      transition :to => :hidden
+      transition all => :hidden
     end
     
     # Makes the message visible in the recipient's inbox
     event :unhide do
-      transition :to => :visible
+      transition all => :visible
     end
     
     state :visible, :value => nil
