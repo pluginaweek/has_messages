@@ -50,11 +50,11 @@ class UserWithUnsentMessages < ActiveSupport::TestCase
   end
   
   def test_should_have_unsent_messages
-    assert_equal [@first_draft, @second_draft], @user.unsent_messages
+    assert_equal [@second_draft, @first_draft], @user.unsent_messages
   end
   
   def test_should_include_unsent_messages_in_messages
-    assert_equal [@sent_message, @first_draft, @second_draft], @user.messages
+    assert_equal [@second_draft, @first_draft, @sent_message], @user.messages
   end
 end
 
@@ -63,6 +63,7 @@ class UserWithSentMessages < ActiveSupport::TestCase
     @user = create_user
     @to = create_user(:login => 'you')
     @draft = create_message(:sender => @user)
+    @draft.save!
     
     @first_sent_message = create_message(:sender => @user, :to => @to)
     @first_sent_message.deliver
@@ -72,11 +73,11 @@ class UserWithSentMessages < ActiveSupport::TestCase
   end
   
   def test_should_have_sent_messages
-    assert_equal [@first_sent_message, @second_sent_message], @user.sent_messages
+    assert_equal [@second_sent_message, @first_sent_message], @user.sent_messages
   end
   
   def test_should_include_sent_messages_in_messages
-    assert_equal [@draft, @first_sent_message, @second_sent_message], @user.messages
+    assert_equal [@second_sent_message, @first_sent_message, @draft], @user.messages
   end
 end
 
@@ -95,7 +96,7 @@ class UserWithReceivedMessages < ActiveSupport::TestCase
   end
   
   def test_should_have_received_messages
-    assert_equal [@first_sent_message, @second_sent_message], @user.received_messages.map(&:message)
+    assert_equal [@second_sent_message, @first_sent_message], @user.received_messages.map(&:message)
   end
 end
 
@@ -122,7 +123,7 @@ class UserWithHiddenMessagesTest < ActiveSupport::TestCase
   end
   
   def test_should_not_include_hidden_messages_in_messages
-    assert_equal [@unsent_message, @sent_message], @user.messages
+    assert_equal [@sent_message, @unsent_message], @user.messages
   end
   
   def test_should_not_include_hidden_messages_in_unsent_messages

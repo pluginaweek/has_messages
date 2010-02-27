@@ -40,13 +40,13 @@ module HasMessages
                   :as => :sender,
                   :class_name => 'Message',
                   :conditions => {:hidden_at => nil},
-                  :order => 'messages.created_at ASC'
+                  :order => 'messages.created_at DESC'
       has_many  :received_messages,
                   :as => :receiver,
                   :class_name => 'MessageRecipient',
                   :include => :message,
                   :conditions => ['message_recipients.hidden_at IS NULL AND messages.state = ?', 'sent'],
-                  :order => 'messages.created_at ASC'
+                  :order => 'messages.created_at DESC'
       
       include HasMessages::InstanceMethods
     end

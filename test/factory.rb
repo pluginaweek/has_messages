@@ -37,7 +37,8 @@ module Factory
     attributes[:sender] = create_user unless attributes.include?(:sender)
     attributes.reverse_merge!(
       :subject => 'New features',
-      :body => 'Lots of new things to talk about... come to the meeting tonight to find out!'
+      :body => 'Lots of new things to talk about... come to the meeting tonight to find out!',
+      :created_at => Time.current + Message.count
     )
   end
   

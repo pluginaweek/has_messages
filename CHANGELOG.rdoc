@@ -1,5 +1,7 @@
 == master
 
+* By default, sort messages newest first [Alexander Lang]
+
 == 0.4.0 / 2009-04-19
 
 * Add dependency on Rails 2.3
