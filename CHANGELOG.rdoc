@@ -1,5 +1,6 @@
 == master
 
+* Release gems via rake-gemcutter instead of rubyforge
 * By default, sort messages newest first [Alexander Lang]
 
 == 0.4.0 / 2009-04-19
