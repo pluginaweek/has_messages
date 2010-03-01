@@ -33,6 +33,17 @@ demonstrating a reference implementation of these features.
 
 == Usage
 
+=== Installation
+
++has_messages+ requires additional database tables to work.  You can generate
+a migration for these tables like so:
+
+  script/generate has_messages
+
+Then simply migrate your database:
+
+  rake db:migrate
+
 === Adding message support
 
   class User < ActiveRecord::Base
