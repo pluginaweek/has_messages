@@ -1,5 +1,7 @@
 == master
 
+== 0.4.1 / 2010-03-07
+
 * Add a generator for db migrations
 * Release gems via rake-gemcutter instead of rubyforge
 * By default, sort messages newest first [Alexander Lang]
