@@ -6,7 +6,7 @@
 
 API
 
-* http://api.pluginaweek.org/has_messages
+* http://rdoc.info/projects/pluginaweek/has_messages
 
 Bugs
 
