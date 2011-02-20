@@ -6,7 +6,7 @@
 
 API
 
-* http://rdoc.info/projects/pluginaweek/has_messages
+* http://rdoc.info/github/pluginaweek/has_messages/master/frames
 
 Bugs
 
