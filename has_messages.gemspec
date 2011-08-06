@@ -16,4 +16,6 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files  = %w(README.rdoc CHANGELOG.rdoc LICENSE)
   
   s.add_dependency("state_machine", ">= 0.7.0")
+  s.add_development_dependency("rake")
+  s.add_development_dependency("plugin_test_helper", ">= 0.3.2")
 end
