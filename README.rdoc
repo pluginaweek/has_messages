@@ -1,4 +1,4 @@
-= has_messages
+= has_messages http://travis-ci.org/pluginaweek/has_messages.png
 
 +has_messages+ demonstrates a reference implementation for sending messages between users.
 
@@ -15,6 +15,10 @@ Bugs
 Development
 
 * http://github.com/pluginaweek/has_messages
+
+Testing
+
+* http://travis-ci.org/pluginaweek/has_messages
 
 Source
 
