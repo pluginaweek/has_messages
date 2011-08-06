@@ -10,7 +10,7 @@ API
 
 Bugs
 
-* http://pluginaweek.lighthouseapp.com/projects/13274-has_messages
+* http://github.com/pluginaweek/has_messages/issues
 
 Development
 
