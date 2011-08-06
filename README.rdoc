@@ -20,6 +20,10 @@ Source
 
 * git://github.com/pluginaweek/has_messages.git
 
+Mailing List
+
+* http://groups.google.com/group/pluginaweek-talk
+
 == Description
 
 Messaging between users is fairly common in web applications, especially those
